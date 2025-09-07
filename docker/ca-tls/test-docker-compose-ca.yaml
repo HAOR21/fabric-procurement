@@ -1,0 +1,110 @@
+version: '2'
+
+services:
+  ca-tls:
+    container_name: ca-tls
+    image: hyperledger/fabric-ca
+    command: sh -c 'fabric-ca-server start -d -b tls-ca-admin:tls-ca-adminpw --port 7052'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/etc/hyperledger/fabric-ca/crypto  # 修改为容器内部的路径
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=ca-tls
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,127.0.0.1
+      - FABRIC_CA_SERVER_DEBUG=true
+    volumes:
+      - ./volume/tls/crypto:/etc/hyperledger/fabric-ca/crypto  # 本地挂载路径（需要根据实际情况调整）
+      - ./volume/tls/tls:/etc/hyperledger/fabric-ca/tls        # 证书等TLS相关的挂载路径（根据需要修改）
+    networks:
+      - fabric-ca
+    ports:
+      - "7052:7052"
+
+  rca-org0:
+    container_name: rca-org0
+    image: hyperledger/fabric-ca
+    command: /bin/bash -c 'fabric-ca-server start -d -b rca-org0-admin:rca-org0-adminpw --port 7053'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=rca-org0
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,127.0.0.1
+      - FABRIC_CA_SERVER_DEBUG=true
+    volumes:
+      - ./volume/org0/ca:/tmp/hyperledger/fabric-ca
+    networks:
+      - fabric-ca
+    ports:
+      - "7053:7053"
+
+  rca-buyer1:
+   container_name: rca-buyer1
+   image: hyperledger/fabric-ca
+   command: /bin/bash -c 'fabric-ca-server start -d -b rca-buyer1-admin:rca-buyer1-adminpw'
+   environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=rca-buyer1
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,127.0.0.1
+      - FABRIC_CA_SERVER_DEBUG=true
+   volumes:
+      - ./volume/buyer1/ca:/tmp/hyperledger/fabric-ca
+   networks:
+      - fabric-ca
+   ports:
+      - 7054:7054
+
+  rca-logistics1:
+    container_name: rca-logistics1
+    image: hyperledger/fabric-ca
+    command: /bin/bash -c 'fabric-ca-server start -d -b rca-logistics1-admin:rca-logistics1-adminpw --port 7056'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=rca-logistics1
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,127.0.0.1
+      - FABRIC_CA_SERVER_DEBUG=true
+    volumes:
+      - ./volume/logistics1/ca:/tmp/hyperledger/fabric-ca
+    networks:
+      - fabric-ca
+    ports:
+      - 7056:7056
+
+  rca-warehouse1:
+    container_name: rca-warehouse1
+    image: hyperledger/fabric-ca
+    command: /bin/bash -c 'fabric-ca-server start -d -b rca-warehouse1-admin:rca-warehouse1-adminpw --port 7057'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=rca-warehouse1
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,127.0.0.1
+      - FABRIC_CA_SERVER_DEBUG=true
+    volumes:
+      - ./volume/warehouse1/ca:/tmp/hyperledger/fabric-ca
+    networks:
+      - fabric-ca
+    ports:
+      - 7057:7057
+
+  rca-bank1:
+    container_name: rca-bank1
+    image: hyperledger/fabric-ca
+    command: /bin/bash -c 'fabric-ca-server start -d -b rca-bank1-admin:rca-bank1-adminpw --port 7058'
+    environment:
+      - FABRIC_CA_SERVER_HOME=/tmp/hyperledger/fabric-ca/crypto
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CSR_CN=rca-bank1
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,127.0.0.1
+      - FABRIC_CA_SERVER_DEBUG=true
+    volumes:
+      - ./volume/bank1/ca:/tmp/hyperledger/fabric-ca
+    networks:
+      - fabric-ca
+    ports:
+      - 7058:7058
+
+
+networks:
+  fabric-ca:
+    driver: bridge

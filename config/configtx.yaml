@@ -1,0 +1,199 @@
+Organizations:
+
+  - &OrdererOrg
+    Name: OrdererOrg
+    ID: OrdererMSP
+    MSPDir: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+
+  - &BuyerOrg1
+    Name: BuyerOrg1
+    ID: Buyer1MSP
+    MSPDir: ./organizations/peerOrganizations/buyer1.example.com/peers/peer1.buyer1.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('Buyer1MSP.admin', 'Buyer1MSP.peer', 'Buyer1MSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('Buyer1MSP.admin', 'Buyer1MSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('Buyer1MSP.admin')"
+    AnchorPeers:
+      - Host: peer1-buyer1
+        Port: 7051
+
+  - &SupplierOrg1
+    Name: SupplierOrg1
+    ID: Supplier1MSP
+    MSPDir: ./organizations/peerOrganizations/supplier1.example.com/peers/peer1.supplier1.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('Supplier1MSP.admin', 'Supplier1MSP.peer', 'Supplier1MSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('Supplier1MSP.admin', 'Supplier1MSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('Supplier1MSP.admin')"
+    AnchorPeers:
+      - Host: peer1-supplier1
+        Port: 7051
+
+  - &LogisticsOrg1
+    Name: LogisticsOrg1
+    ID: Logistics1MSP
+    MSPDir: ./organizations/peerOrganizations/logistics1.example.com/peers/peer1.logistics1.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('Logistics1MSP.admin', 'Logistics1MSP.peer', 'Logistics1MSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('Logistics1MSP.admin', 'Logistics1MSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('Logistics1MSP.admin')"
+    AnchorPeers:
+      - Host: peer1-logistics1
+        Port: 7051
+
+  - &WarehouseOrg1
+    Name: WarehouseOrg1
+    ID: Warehouse1MSP
+    MSPDir: ./organizations/peerOrganizations/warehouse1.example.com/peers/peer1.warehouse1.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('Warehouse1MSP.admin', 'Warehouse1MSP.peer', 'Warehouse1MSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('Warehouse1MSP.admin', 'Warehouse1MSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('Warehouse1MSP.admin')"
+    AnchorPeers:
+      - Host: peer1-warehouse1
+        Port: 7051
+
+  - &BankOrg1
+    Name: BankOrg1
+    ID: Bank1MSP
+    MSPDir: ./organizations/peerOrganizations/bank1.example.com/peers/peer1.bank1.example.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('Bank1MSP.admin', 'Bank1MSP.peer', 'Bank1MSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('Bank1MSP.admin', 'Bank1MSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('Bank1MSP.admin')"
+    AnchorPeers:
+      - Host: peer1-bank1
+        Port: 7051
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_5: true
+
+Application: &ApplicationDefaults
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: etcdraft
+  Addresses:
+    - orderer1-org0:7050
+  EtcdRaft:
+    Consenters:
+      - Host: orderer1-org0
+        Port: 7050
+        ClientTLSCert: ./organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/server.crt
+  Organizations:
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+  Capabilities:
+    <<: *OrdererCapabilities
+
+Channel: &ChannelDefaults
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  Capabilities:
+    <<: *ChannelCapabilities
+
+Profiles:
+
+  OrdererGenesis:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      Organizations:
+        - *OrdererOrg
+    Consortiums:
+      ProcurementConsortium:
+        Organizations:
+          - *BuyerOrg1
+          - *SupplierOrg1
+          - *LogisticsOrg1
+          - *WarehouseOrg1
+          - *BankOrg1
+
+  ProcurementChannel:
+    Consortium: ProcurementConsortium
+    <<: *ChannelDefaults
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *BuyerOrg1
+        - *SupplierOrg1
+        - *LogisticsOrg1
+        - *WarehouseOrg1
+        - *BankOrg1

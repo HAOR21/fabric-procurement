@@ -1,0 +1,39 @@
+[
+  {
+    "name": "OrderCollection",
+    "policy": "OR('BuyerMSP.member','SupplierMSP.member')",
+    "requiredPeerCount": 1,
+    "maxPeerCount": 2,
+    "blockToLive": 0,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": true
+  },
+  {
+    "name": "PaymentCollection",
+    "policy": "OR('BuyerMSP.member','BankMSP.member')",
+    "requiredPeerCount": 1,
+    "maxPeerCount": 2,
+    "blockToLive": 0,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": true
+  },
+  {
+    "name": "LogisticsCollection",
+    "policy": "OR('LogisticsMSP.member','WarehouseMSP.member')",
+    "requiredPeerCount": 1,
+    "maxPeerCount": 2,
+    "blockToLive": 0,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": true
+  },
+  {
+    "name": "WarehouseCollection",
+    "policy": "OR('WarehouseMSP.member','BuyerMSP.member','LogisticsMSP.member')",
+    "requiredPeerCount": 1,
+    "maxPeerCount": 3,
+    "blockToLive": 0,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": true
+  }
+]
+
