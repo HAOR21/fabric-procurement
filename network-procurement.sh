@@ -20,7 +20,7 @@ done
 
 # 检查 cfgPath 是否为空
 if [ -z "$FABRIC_CFG_PATH" ]; then
-  echo "Error: --fabric_cfg_path is required and cannot be empty."
+  echo "Error: --cfgPath is required and cannot be empty."
   exit 1
 fi
 
@@ -197,6 +197,7 @@ initUser() {
 # -------------------------------
 runTest() {
   export PATH=$PATH:${ROOT_DIR}/fabric-bin/bin
+  export FABRIC_TLS_ORG0=./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/ca.crt
   echo "====1️⃣ Run CA server ===="
   runCAServer
 
@@ -261,36 +262,38 @@ runTest() {
   
   echo "====6️⃣init Genesis ===="
   initGenesis
-  
-  echo "7️⃣ init mychannel"
-  ./fabric-procurement/config/gen-channel.sh
 
   echo "====start Peer docker===="
-  docker compose -f ./dokcer/org01/docker-compose-org0.yaml up -d
-  docker compose -f ./dokcer/buyer1/docker-compose-buyer1.yaml up -d
-  docker compose -f ./dokcer/logistics1/docker-compose-logistics1.yaml up -d
-  docker compose -f ./dokcer/supplier1/docker-compose-supplier1.yaml up -d
-  docker compose -f ./dokcer/warehouse1/docker-compose-warehouse1.yaml up -d
-  docker compose -f ./dokcer/bank1/docker-compose-bank1.yaml up -d
+  docker compose -f ./docker/org0/docker-compose-orderer1.yaml up -d
+  docker compose -f ./docker/buyer1/docker-compose-buyer1.yaml up -d
+  docker compose -f ./docker/logistics1/docker-compose-logistics1.yaml up -d
+  docker compose -f ./docker/supplier1/docker-compose-supplier1.yaml up -d
+  docker compose -f ./docker/warehouse1/docker-compose-warehouse1.yaml up -d
+  docker compose -f ./docker/bank1/docker-compose-bank1.yaml up -d
   
   echo "====create mychannel===="
   ./config/changePeer/orderer1-org0-setEnv.sh
-  osnadmin channel join --channelID mychannel --config-block ./config/channel-artifacts/gen-mychannel.block -o org0.example.com:7050 --ca-file "./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem" --client-cert "./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem" --client-key "./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem"
+  osnadmin channel join --channelID mychannel --config-block ./config/channel-artifacts/gen-mychannel.block -o orderer1.org0.example.com:7050 --ca-file "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/ca.crt" --client-cert "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt" --client-key "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.key"
   ./config/changePeer/peer1-buyer1-setEnv.sh
-  peer channel create -o org0.example.com:7050 -c mychannel -f ./config/channel-artifacts/channel.tx --outputBlock ./config/channel-artifacts/mychannel.block --cafile ./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem
+  peer channel create -o orderer1.org0.example.com:7050 -c mychannel -f ./config/channel-artifacts/channel.tx --outputBlock ./config/channel-artifacts/mychannel.block --cafile ./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem
   echo "====create mychannel Done===="
   
   echo "====join mychannel===="
   #change peer to join mychannel
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer.example.com:7050 
-  ./config/changePeer/peer1-logistics1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer.example.com:7050
+  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0.example.com:7050 --tls --cafile ${FABRIC_TLS_ORG0}
+
+  ./config/changePeer/peer1-logistics1-setEnv.sh 
+  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0.example.com:7050 --tls --cafile ${FABRIC_TLS_ORG0}
+
   ./config/changePeer/peer1-supplier1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer.example.com:7050
+  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0.example.com:7050 --tls --cafile ${FABRIC_TLS_ORG0}
+
   ./config/changePeer/peer1-warehouse1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer.example.com:7050
+  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0.example.com:7050 --tls --cafile ${FABRIC_TLS_ORG0}
+
   ./config/changePeer/peer1-bank1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer.example.com:7050
+  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0.example.com:7050 --tls --cafile ${FABRIC_TLS_ORG0}
+
 
   echo "==== 全流程 runTest 完成 ===="
 }
