@@ -1,19 +1,19 @@
 Organizations:
 
-  - &OrdererOrg
-    Name: OrdererOrg
-    ID: OrdererMSP
-    MSPDir: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.com/msp
+  - &Org0
+    Name: Org0
+    ID: Org0MSP
+    MSPDir: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/msp
     Policies:
       Readers:
         Type: Signature
-        Rule: "OR('OrdererMSP.member')"
+        Rule: "OR('Org0MSP.member')"
       Writers:
         Type: Signature
-        Rule: "OR('OrdererMSP.member')"
+        Rule: "OR('Org0MSP.member')"
       Admins:
         Type: Signature
-        Rule: "OR('OrdererMSP.admin')"
+        Rule: "OR('Org0MSP.admin')"
 
   - &BuyerOrg1
     Name: BuyerOrg1
@@ -30,7 +30,7 @@ Organizations:
         Type: Signature
         Rule: "OR('Buyer1MSP.admin')"
     AnchorPeers:
-      - Host: peer1-buyer1
+      - Host: peer1.buyer1
         Port: 7051
 
   - &SupplierOrg1
@@ -48,7 +48,7 @@ Organizations:
         Type: Signature
         Rule: "OR('Supplier1MSP.admin')"
     AnchorPeers:
-      - Host: peer1-supplier1
+      - Host: peer1.supplier1
         Port: 7051
 
   - &LogisticsOrg1
@@ -66,7 +66,7 @@ Organizations:
         Type: Signature
         Rule: "OR('Logistics1MSP.admin')"
     AnchorPeers:
-      - Host: peer1-logistics1
+      - Host: peer1.logistics1
         Port: 7051
 
   - &WarehouseOrg1
@@ -84,7 +84,7 @@ Organizations:
         Type: Signature
         Rule: "OR('Warehouse1MSP.admin')"
     AnchorPeers:
-      - Host: peer1-warehouse1
+      - Host: peer1.warehouse1
         Port: 7051
 
   - &BankOrg1
@@ -102,7 +102,7 @@ Organizations:
         Type: Signature
         Rule: "OR('Bank1MSP.admin')"
     AnchorPeers:
-      - Host: peer1-bank1
+      - Host: peer1.bank1
         Port: 7051
 
 Capabilities:
@@ -131,13 +131,13 @@ Application: &ApplicationDefaults
 Orderer: &OrdererDefaults
   OrdererType: etcdraft
   Addresses:
-    - orderer1-org0:7050
+    - orderer1.org0:7050
   EtcdRaft:
     Consenters:
-      - Host: orderer1-org0
+      - Host: orderer1.org0
         Port: 7050
-        ClientTLSCert: ./organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/server.crt
-        ServerTLSCert: ./organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/server.crt
+        ClientTLSCert: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
+        ServerTLSCert: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
   Organizations:
   Policies:
     Readers:
@@ -176,7 +176,7 @@ Profiles:
     Orderer:
       <<: *OrdererDefaults
       Organizations:
-        - *OrdererOrg
+        - *Org0
     Consortiums:
       ProcurementConsortium:
         Organizations:

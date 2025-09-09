@@ -1,13 +1,13 @@
 version: '3.7'
 
 services:
-  peer1-logistics1:
-    container_name: peer1-logistics1
+  peer1.logistics1:
+    container_name: peer1.logistics1
     image: hyperledger/fabric-peer
     environment:
-      - CORE_PEER_ID=peer1-logistics1
-      - CORE_PEER_ADDRESS=peer1-logistics1:7051
-      - CORE_PEER_LOCALMSPID=logistics1MSP
+      - CORE_PEER_ID=peer1.logistics1
+      - CORE_PEER_ADDRESS=peer1.logistics1:7051
+      - CORE_PEER_LOCALMSPID=Logistics1MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-logistics1
@@ -18,10 +18,10 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-ca-cert.pem
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-logistics1:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.logistics1:7051
       - CORE_PEER_GOSSIP_SKIPHANDSHAKE=false
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb-peer1-logistics1:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1.logistics1:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/logistics1/peer1
@@ -35,9 +35,9 @@ services:
       - fabric-logistics1
       - fabric-org0
 
-  couchdb-peer1-logistics1:
+  couchdb.peer1.logistics1:
     image: couchdb:3.2
-    container_name: couchdb-peer1-logistics1
+    container_name: couchdb.peer1.logistics1
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw

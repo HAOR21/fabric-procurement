@@ -1,7 +1,7 @@
 [
   {
     "name": "OrderCollection",
-    "policy": "OR('BuyerMSP.member','SupplierMSP.member')",
+    "policy": "OR('Buyer1MSP.member','Supplier1MSP.member')",
     "requiredPeerCount": 1,
     "maxPeerCount": 2,
     "blockToLive": 0,
@@ -10,7 +10,7 @@
   },
   {
     "name": "PaymentCollection",
-    "policy": "OR('BuyerMSP.member','BankMSP.member')",
+    "policy": "OR('Buyer1MSP.member','Bank1MSP.member')",
     "requiredPeerCount": 1,
     "maxPeerCount": 2,
     "blockToLive": 0,
@@ -19,7 +19,7 @@
   },
   {
     "name": "LogisticsCollection",
-    "policy": "OR('LogisticsMSP.member','WarehouseMSP.member')",
+    "policy": "OR('Logistics1MSP.member','Warehouse1MSP.member')",
     "requiredPeerCount": 1,
     "maxPeerCount": 2,
     "blockToLive": 0,
@@ -28,7 +28,7 @@
   },
   {
     "name": "WarehouseCollection",
-    "policy": "OR('WarehouseMSP.member','BuyerMSP.member','LogisticsMSP.member')",
+    "policy": "OR('Warehouse1MSP.member','Buyer1MSP.member','Logistics1MSP.member')",
     "requiredPeerCount": 1,
     "maxPeerCount": 3,
     "blockToLive": 0,

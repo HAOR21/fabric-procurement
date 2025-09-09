@@ -10,12 +10,12 @@ export PATH=$PROJECT_ROOT/fabric-bin/bin:$PATH
 export FABRIC_CFG_PATH=$PROJECT_ROOT/config
 
 # orderer 节点相关
-export ORDERER_CA=$PROJECT_ROOT/organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/ca.crt
-export ORDERER_ADMIN_TLS_SIGN_CERT=$PROJECT_ROOT/organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/signcerts/cert.pem
-export ORDERER_ADMIN_TLS_PRIVATE_KEY=$PROJECT_ROOT/organizations/ordererOrganizations/org0/orderers/orderer1-org0/tls/keystore/key.pem
+export ORDERER_CA=$PROJECT_ROOT/organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/ca.crt
+export ORDERER_ADMIN_TLS_SIGN_CERT=$PROJECT_ROOT/organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/signcerts/cert.pem
+export ORDERER_ADMIN_TLS_PRIVATE_KEY=$PROJECT_ROOT/organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/keystore/key.pem
 
 # orderer 服务地址
-export ORDERER_ADDRESS=orderer1-org0:7050
+export ORDERER_ADDRESS=orderer1.org0:7050
 
 popd > /dev/null
 

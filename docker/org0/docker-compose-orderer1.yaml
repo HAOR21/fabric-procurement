@@ -1,14 +1,14 @@
 version: '3.7'
 
 services:
-  orderer1-org0:
-    container_name: orderer1-org0
+  orderer1.org0:
+    container_name: orderer1.org0
     image: hyperledger/fabric-orderer
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_LISTENPORT=7050
-      - ORDERER_GENERAL_LOCALMSPID=org0MSP
+      - ORDERER_GENERAL_LOCALMSPID=Org0MSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
