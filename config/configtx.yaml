@@ -3,7 +3,7 @@ Organizations:
   - &Org0
     Name: Org0
     ID: Org0MSP
-    MSPDir: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/msp
+    MSPDir: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -18,7 +18,7 @@ Organizations:
   - &BuyerOrg1
     Name: BuyerOrg1
     ID: Buyer1MSP
-    MSPDir: ./organizations/peerOrganizations/buyer1.example.com/peers/peer1.buyer1.example.com/msp
+    MSPDir: ../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -30,13 +30,13 @@ Organizations:
         Type: Signature
         Rule: "OR('Buyer1MSP.admin')"
     AnchorPeers:
-      - Host: peer1.buyer1
+      - Host: peer1-buyer1
         Port: 7051
 
   - &SupplierOrg1
     Name: SupplierOrg1
     ID: Supplier1MSP
-    MSPDir: ./organizations/peerOrganizations/supplier1.example.com/peers/peer1.supplier1.example.com/msp
+    MSPDir: ../organizations/peerOrganizations/supplier1.example.com/peers/peer1-supplier1.supplier1.example.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -48,13 +48,13 @@ Organizations:
         Type: Signature
         Rule: "OR('Supplier1MSP.admin')"
     AnchorPeers:
-      - Host: peer1.supplier1
+      - Host: peer1-supplier1
         Port: 7051
 
   - &LogisticsOrg1
     Name: LogisticsOrg1
     ID: Logistics1MSP
-    MSPDir: ./organizations/peerOrganizations/logistics1.example.com/peers/peer1.logistics1.example.com/msp
+    MSPDir: ../organizations/peerOrganizations/logistics1.example.com/peers/peer1-logistics1.logistics1.example.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -66,13 +66,13 @@ Organizations:
         Type: Signature
         Rule: "OR('Logistics1MSP.admin')"
     AnchorPeers:
-      - Host: peer1.logistics1
+      - Host: peer1-logistics1
         Port: 7051
 
   - &WarehouseOrg1
     Name: WarehouseOrg1
     ID: Warehouse1MSP
-    MSPDir: ./organizations/peerOrganizations/warehouse1.example.com/peers/peer1.warehouse1.example.com/msp
+    MSPDir: ../organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -84,13 +84,13 @@ Organizations:
         Type: Signature
         Rule: "OR('Warehouse1MSP.admin')"
     AnchorPeers:
-      - Host: peer1.warehouse1
+      - Host: peer1-warehouse1
         Port: 7051
 
   - &BankOrg1
     Name: BankOrg1
     ID: Bank1MSP
-    MSPDir: ./organizations/peerOrganizations/bank1.example.com/peers/peer1.bank1.example.com/msp
+    MSPDir: ../organizations/peerOrganizations/bank1.example.com/peers/peer1-bank1.bank1.example.com/msp
     Policies:
       Readers:
         Type: Signature
@@ -102,7 +102,7 @@ Organizations:
         Type: Signature
         Rule: "OR('Bank1MSP.admin')"
     AnchorPeers:
-      - Host: peer1.bank1
+      - Host: peer1-bank1
         Port: 7051
 
 Capabilities:
@@ -131,13 +131,13 @@ Application: &ApplicationDefaults
 Orderer: &OrdererDefaults
   OrdererType: etcdraft
   Addresses:
-    - orderer1.org0:7050
+    - orderer1-org0:7050
   EtcdRaft:
     Consenters:
-      - Host: orderer1.org0
+      - Host: orderer1-org0
         Port: 7050
-        ClientTLSCert: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
-        ServerTLSCert: ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/server.crt
+        ClientTLSCert: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem
+        ServerTLSCert: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem
   Organizations:
   Policies:
     Readers:

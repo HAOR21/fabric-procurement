@@ -1,10 +1,11 @@
 services:
-  peer1.buyer1:
-    container_name: peer1.buyer1       # 容器名称
+  peer1-buyer1:
+    container_name: peer1-buyer1       # 容器名称
     image: hyperledger/fabric-peer     # 使用的 peer 镜像
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     environment:                       # Peer 的环境变量配置
-      - CORE_PEER_ID=peer1.buyer1     # Peer 的唯一标识符
-      - CORE_PEER_ADDRESS=peer1.buyer1:7051  # Peer 监听的主机名和端口（对外服务）
+      - CORE_PEER_ID=peer1-buyer1     # Peer 的唯一标识符
+      - CORE_PEER_ADDRESS=peer1-buyer1:7051  # Peer 监听的主机名和端口（对外服务）
       - CORE_PEER_LOCALMSPID=Buyer1MSP       # 组织的 MSP ID
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp  # Peer 的注册证书、MSP 路径
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock  # Docker 运行 chaincode 的本地接口
@@ -16,10 +17,10 @@ services:
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-ca-cert.pem # TLS 根证书
       - CORE_PEER_GOSSIP_USELEADERELECTION=true   # 启用 leader election
       - CORE_PEER_GOSSIP_ORGLEADER=false         # 本节点不是组织 leader
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.buyer1:7051  # 节点对外广播地址
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-buyer1:7051  # 节点对外广播地址
       - CORE_PEER_GOSSIP_SKIPHANDSHAKE=false      # 跳过握手，适用于初始启动阶段
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1.buyer1:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1-buyer1:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
 
@@ -28,18 +29,18 @@ services:
       - ../chaincodeRun:/host/var/run   # Docker socket 映射，用于 chaincode 容器
       - ../../data/buyer1/peer1:/tmp/hyperledger/buyer1/peer1  # Peer 数据挂载卷
   # 1. Peer MSP
-      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1.buyer1.example.com/msp:/etc/hyperledger/msp
+      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/msp:/etc/hyperledger/msp
   # 2. Peer TLS 证书和私钥
-      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1.buyer1.example.com/tls:/etc/hyperledger/tls
+      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls:/etc/hyperledger/tls
   # 3. TLS-CA 根证书路径
       - ../../organizations/fabric-ca/tls-ca/crypto:/etc/hyperledger/tlsca
     networks:
       - fabric-buyer1  
       - fabric-org0
         
-  couchdb.peer1.buyer1:
+  couchdb.peer1-buyer1:
     image: couchdb:3.2
-    container_name: couchdb.peer1.buyer1
+    container_name: couchdb.peer1-buyer1
     environment:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw

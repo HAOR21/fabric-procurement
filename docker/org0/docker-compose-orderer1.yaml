@@ -1,9 +1,10 @@
 version: '3.7'
 
 services:
-  orderer1.org0:
-    container_name: orderer1.org0
+  orderer1-org0:
+    container_name: orderer1-org0
     image: hyperledger/fabric-orderer
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -18,8 +19,8 @@ services:
     command: orderer
     volumes:
       - ../../data/org0/orderer1:/var/hyperledger/production/orderer
-      - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/msp:/var/hyperledger/orderer/msp
-      - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls:/var/hyperledger/orderer/tls
+      - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/msp:/var/hyperledger/orderer/msp
+      - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls:/var/hyperledger/orderer/tls
       - ../../organizations/fabric-ca/tls-ca/crypto:/var/hyperledger/orderer/tlsca
     ports:
       - 7050:7050
