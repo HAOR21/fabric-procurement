@@ -12,9 +12,19 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=Org0MSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tlsca/tls-ca-cert.pem]
+      # >>>>>>>>>> 添加管理 API 配置 <<<<<<<<<<
+      # 启用管理 API
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:8443
+      - ORDERER_OPERATIONS_TLS_ENABLED=true
+      - ORDERER_OPERATIONS_TLS_CERT_FILE=/var/hyperledger/orderer/tls/signcerts/cert.pem # 使用 TLS 证书
+      - ORDERER_OPERATIONS_TLS_KEY_FILE=/var/hyperledger/orderer/tls/keystore/key.pem   # 使用 TLS 私钥
+
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/keystore/key.pem
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/signcerts/cert.pem
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/tlscacerts/tls-localhost-7052.pem]
+      # 指定创世区块文件的位置
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/genesis.block
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
@@ -22,8 +32,10 @@ services:
       - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/msp:/var/hyperledger/orderer/msp
       - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls:/var/hyperledger/orderer/tls
       - ../../organizations/fabric-ca/tls-ca/crypto:/var/hyperledger/orderer/tlsca
+      - ../../config/channel-artifacts/gen-mychannel.block:/var/hyperledger/orderer/genesis.block # Orderer 在启动时需要一个初始的区块来引导网络
     ports:
       - 7050:7050
+      - 8443:8443  # 管理 API 端口 (osnadmin 需要连接这个端口)
     networks:
       - fabric-org0
 

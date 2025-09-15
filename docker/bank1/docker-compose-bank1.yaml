@@ -1,4 +1,3 @@
-version: '3.7'
 
 services:
   peer1-bank1:
@@ -14,9 +13,9 @@ services:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-bank1
       - FABRIC_LOGGING_SPEC=debug
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-ca-cert.pem
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/signcerts/cert.pem
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/keystore/key.pem
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-cert.pem
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-bank1:7051
@@ -28,7 +27,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/bank1/peer1
     volumes:
       - ../chaincodeRun:/host/var/run
-      - ../../data/bank1/peer1:/tmp/hyperledger/bank1/peer1
+      - ../../data/bank1/peer1:/var/hyperledger/production # Fabric Peer 默认将 fileSystemPath为 /var/hyperledger/production。可通过环境变量 CORE_PEER_FILESYSTEMPATH 覆盖
       - ../../organizations/peerOrganizations/bank1.example.com/peers/peer1-bank1.bank1.example.com/msp:/etc/hyperledger/msp
       - ../../organizations/peerOrganizations/bank1.example.com/peers/peer1-bank1.bank1.example.com/tls:/etc/hyperledger/tls
       - ../../organizations/fabric-ca/tls-ca/crypto:/etc/hyperledger/tlsca

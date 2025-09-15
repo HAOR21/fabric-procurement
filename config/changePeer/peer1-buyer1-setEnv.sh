@@ -16,7 +16,8 @@ export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID=Buyer1MSP
 export CORE_PEER_TLS_ROOTCERT_FILE=$PROJECT_ROOT/organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls/ca.crt
 export CORE_PEER_ADDRESS=peer1-buyer1:7051
-export CORE_PEER_MSPCONFIGPATH=$PROJECT_ROOT/organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/msp
+export CORE_PEER_MSPCONFIGPATH=$PROJECT_ROOT/organizations/peerOrganizations/buyer1.example.com/users/Admin-buyer1@buyer1.example.com/msp #这里需要指向具体身份的MSp文件来>表明客户端的身份
+
 
 popd > /dev/null
 

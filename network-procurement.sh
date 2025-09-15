@@ -179,14 +179,27 @@ initOrderer() {
   export FABRIC_CA_CLIENT_HOME=${ORDERER_DIR}
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/org0/crypto/ca-cert.pem
   export FABRIC_CA_CLIENT_MSPDIR=msp
-  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${ORDERER_NAME}.${ORG_DOMAIN}
+  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${ORDERER_NAME}.${ORG_DOMAIN} --csr.names OU=orderer
 
   # TLS
   export FABRIC_CA_CLIENT_MSPDIR=tls
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/tls-ca/crypto/tls-cert.pem
 
-  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${ORDERER_NAME}.${ORG_DOMAIN}
+  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${ORDERER_NAME}.${ORG_DOMAIN},localhost
 
+  # >>>>>>>>>> 添加生成 config.yaml <<<<<<<<<<
+  cat <<EOF > "${ORDERER_DIR}/msp/config.yaml"
+  NodeOUs:
+    Enable: true
+    ClientOUIdentifier:
+      OrganizationalUnitIdentifier: client
+    PeerOUIdentifier:
+      OrganizationalUnitIdentifier: peer
+    AdminOUIdentifier:
+      OrganizationalUnitIdentifier: admin
+    OrdererOUIdentifier: # Orderer MSP 需要识别自己是 Orderer
+      OrganizationalUnitIdentifier: orderer
+EOF
   # fix key name
   TLS_KEY=$(ls ${ORDERER_DIR}/tls/keystore/*_sk)
   mv $TLS_KEY ${ORDERER_DIR}/tls/keystore/key.pem
@@ -210,12 +223,26 @@ initPeer() {
   export FABRIC_CA_CLIENT_HOME=${PEER_DIR}
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/${ORG}/crypto/ca-cert.pem
   export FABRIC_CA_CLIENT_MSPDIR=msp
-  fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${PEER_NAME}.${ORG_DOMAIN}
+  fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${PEER_NAME}.${ORG_DOMAIN} --csr.names OU=peer
 
   # TLS
   export FABRIC_CA_CLIENT_MSPDIR=tls
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/tls-ca/crypto/tls-cert.pem
   fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${PEER_NAME}.${ORG_DOMAIN}
+
+  # >>>>>>>>>> 添加生成 config.yaml <<<<<<<<<<
+  cat <<EOF > "${PEER_DIR}/msp/config.yaml"
+  NodeOUs:
+    Enable: true
+    ClientOUIdentifier:
+      OrganizationalUnitIdentifier: client
+    PeerOUIdentifier: # Peer MSP 需要识别自己是 Peer
+      OrganizationalUnitIdentifier: peer
+    AdminOUIdentifier:
+      OrganizationalUnitIdentifier: admin
+    OrdererOUIdentifier: # 可选，如果需要验证 Orderer 证书
+      OrganizationalUnitIdentifier: orderer
+EOF
 
   # fix key name
   TLS_KEY=$(ls ${PEER_DIR}/tls/keystore/*_sk)
@@ -234,11 +261,20 @@ initUser() {
   local USER_DIR=${ROOT_DIR}/organizations/peerOrganizations/${ORG_DOMAIN}/users/${USER_NAME}@${ORG_DOMAIN}
 
   mkdir -p ${USER_DIR}/msp
+  local first_four_chars="${USER_NAME:0:4}"  # 提取前4个字符  
+  local identity=""
+  if [ "$first_four_chars" = "ADMI" ]; then
+      identity="admin"
+  elif [ "$first_four_chars" = "User" ]; then
+      identity="user"
+  else
+      identity="unknown"  
+  fi
 
   export FABRIC_CA_CLIENT_HOME=${USER_DIR}
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/${ORG}/crypto/ca-cert.pem
   export FABRIC_CA_CLIENT_MSPDIR=msp
-  fabric-ca-client enroll -d -u https://${USER_NAME}:${USER_PW}@localhost:${ORG_CA_PORT}
+  fabric-ca-client enroll -d -u https://${USER_NAME}:${USER_PW}@localhost:${ORG_CA_PORT} --csr.names OU=${identity}
 }
 
 # -------------------------------
@@ -247,13 +283,17 @@ initUser() {
 runTest() {
 
   mkdir -p organizations/fabric-ca/{tls-ca,org0,buyer1,supplier1,logistics1,warehouse1,bank1}/crypto
+  mkdir -p data/{org0,buyer1,supplier1,logistics1,warehouse1,bank1}/{orderer1,peer1}
+  # 设置所有者为当前用户，并确保有写权限
+  sudo chown -R $(id -u):$(id -g) data
+  chmod -R 775 data
   sudo chown -R $(id -u):$(id -g) organizations
   sudo chmod -R 775 organizations/fabric-ca
 
   export LOCAL_UID=$(id -u)
   export LOCAL_GID=$(id -g)
   export PATH=$PATH:${ROOT_DIR}/fabric-bin/bin
-  export FABRIC_TLS_ORG0=./organizations/ordererOrganizations/org0.example.com/orderers/orderer1.org0.example.com/tls/ca.crt
+  export FABRIC_TLS_ORG0=./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem
   echo "====1️⃣ Run CA server ===="
   runCAServer
 
@@ -273,10 +313,13 @@ runTest() {
   # 注册 Orderer 身份到 RCA 和 TLS
   registerMSPIdentity 7053 "orderer1-org0" "ordererpw" "orderer" "org0"
   registerTLSIdentity 7052 "orderer1-org0" "ordererpw" "orderer"
+
+  registerMSPIdentity 7053 "Admin-org0" "org0AdminPW" "admin" "org0" "" # 注册 Org Admin
   
+
   # 初始化 Orderer MSP 和 TLS
+  initUser "Admin-org0" "org0AdminPW" 7053 "org0"
   initOrderer "orderer1-org0" "ordererpw" 7053 7052
-  
     # Buyer Organization
   echo "==== 初始化 Buyer1 ===="
   # 为 buyer1 执行 enrollCA
@@ -289,11 +332,10 @@ runTest() {
   registerTLSIdentity 7052 "peer1-buyer1" "buyer1PW" "peer" 
   registerTLSIdentity 7052 "Admin-buyer1" "buyer1AdminPW" "admin"
   registerTLSIdentity 7052 "User1-buyer1" "buyer1UserPW" "user"
-
-  
-  initPeer "peer1-buyer1" "buyer1PW" 7054 7052 "buyer1" 
+ 
   initUser "Admin-buyer1" "buyer1AdminPW" 7054 "buyer1"
   initUser "User1-buyer1" "buyer1UserPW" 7054 "buyer1"
+  initPeer "peer1-buyer1" "buyer1PW" 7054 7052 "buyer1"
   # Supplier Organization
   echo "==== 初始化 Supplier1 ===="
   # 为 supplier1 执行 enrollCA
@@ -307,9 +349,9 @@ runTest() {
   registerTLSIdentity 7052 "User1-supplier1" "supplier1UserPW" "user"
   
   # 初始化 Supplier1 MSP 和 TLS
-  initPeer "peer1-supplier1" "supplier1PW" 7055 7052 "supplier1"
   initUser "Admin-supplier1" "supplier1AdminPW" 7055 "supplier1"
   initUser "User1-supplier1" "supplier1UserPW" 7055 "supplier1"
+  initPeer "peer1-supplier1" "supplier1PW" 7055 7052 "supplier1"
   
   # Logistics Organization
   echo "==== 初始化 Logistics1 ===="
@@ -322,12 +364,11 @@ runTest() {
   registerTLSIdentity 7052 "peer1-logistics1" "logistics1PW" "peer"
   registerTLSIdentity 7052 "Admin-logistics1" "logistics1AdminPW" "admin"
   registerTLSIdentity 7052 "User1-logistics1" "logistics1UserPW" "user"
-  
   # 初始化 Logistics1 MSP 和 TLS
-  initPeer "peer1-logistics1" "logistics1PW" 7056 7052 "logistics1"
   initUser "Admin-logistics1" "logistics1AdminPW" 7056 "logistics1"
   initUser "User1-logistics1" "logistics1UserPW" 7056 "logistics1"
-  
+  initPeer "peer1-logistics1" "logistics1PW" 7056 7052 "logistics1"
+
   # Warehouse Organization
   echo "==== 初始化 Warehouse1 ===="
   # 为 warehouse1 执行 enrollCA
@@ -341,9 +382,9 @@ runTest() {
   registerTLSIdentity 7052 "User1-warehouse1" "warehouse1UserPW" "user"
   
   # 初始化 Warehouse1 MSP 和 TLS
-  initPeer "peer1-warehouse1" "warehouse1PW" 7057 7052 "warehouse1"
   initUser "Admin-warehouse1" "warehouse1AdminPW" 7057 "warehouse1"
   initUser "User1-warehouse1" "warehouse1UserPW" 7057 "warehouse1"
+  initPeer "peer1-warehouse1" "warehouse1PW" 7057 7052 "warehouse1"
   
   # Bank Organization
   echo "==== 初始化 Bank1 ===="
@@ -358,9 +399,9 @@ runTest() {
   registerTLSIdentity 7052 "User1-bank1" "bank1UserPW" "user"
   
   # 初始化 Bank1 MSP 和 TLS
-  initPeer "peer1-bank1" "bank1PW" 7058 7052 "bank1"
   initUser "Admin-bank1" "bank1AdminPW" 7058 "bank1"
   initUser "User1-bank1" "bank1UserPW" 7058 "bank1"
+  initPeer "peer1-bank1" "bank1PW" 7058 7052 "bank1"
 
   echo "==== 完成所有组织和节点初始化 ===="
 
@@ -380,7 +421,7 @@ runTest() {
   
   echo "====6️⃣ create mychannel===="
   ./config/changePeer/orderer1-org0-setEnv.sh
-  osnadmin channel join --channelID mychannel --config-block ./config/channel-artifacts/gen-mychannel.block -o orderer1-org0:7050 --ca-file "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/ca.crt" --client-cert "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem" --client-key "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/keystore/key.pem"
+  osnadmin channel join --channelID genesis-block --config-block ./config/channel-artifacts/gen-mychannel.block --orderer-address localhost:8443 --ca-file "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem" --client-cert "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem" --client-key "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/keystore/key.pem"
   ./config/changePeer/peer1-buyer1-setEnv.sh
   peer channel create -o orderer1-org0:7050 -c mychannel -f ./config/channel-artifacts/channel.tx --outputBlock ./config/channel-artifacts/mychannel.block --cafile ./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem
   echo "====create mychannel Done===="
@@ -493,5 +534,3 @@ case "$ACTION" in
     down
     ;;
 esac
-
-

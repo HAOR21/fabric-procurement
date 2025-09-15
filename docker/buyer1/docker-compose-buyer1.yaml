@@ -12,9 +12,9 @@ services:
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-buyer1  # Docker 网络模式
       - FABRIC_LOGGING_SPEC=debug    # 日志等级
       - CORE_PEER_TLS_ENABLED=true   # 启用 TLS
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/server.crt  # Peer TLS 证书
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/server.key     # Peer TLS 私钥
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-ca-cert.pem # TLS 根证书
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/signcerts/cert.pem # Peer TLS 证书
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/keystore/key.pem # Peer TLS 私钥
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-cert.pem # TLS 根证书
       - CORE_PEER_GOSSIP_USELEADERELECTION=true   # 启用 leader election
       - CORE_PEER_GOSSIP_ORGLEADER=false         # 本节点不是组织 leader
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-buyer1:7051  # 节点对外广播地址
@@ -27,7 +27,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/buyer1/peer1  # 容器工作目录
     volumes:
       - ../chaincodeRun:/host/var/run   # Docker socket 映射，用于 chaincode 容器
-      - ../../data/buyer1/peer1:/tmp/hyperledger/buyer1/peer1  # Peer 数据挂载卷
+      - ../../data/buyer1/peer1:/var/hyperledger/production  # Peer 数据挂载卷
   # 1. Peer MSP
       - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/msp:/etc/hyperledger/msp
   # 2. Peer TLS 证书和私钥
