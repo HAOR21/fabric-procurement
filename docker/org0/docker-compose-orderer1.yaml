@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   orderer1-org0:
     container_name: orderer1-org0
@@ -11,13 +9,16 @@ services:
       - ORDERER_GENERAL_LISTENPORT=7050
       - ORDERER_GENERAL_LOCALMSPID=Org0MSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_ENABLED=true 
       # >>>>>>>>>> 添加管理 API 配置 <<<<<<<<<<
       # 启用管理 API
-      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:8443
-      - ORDERER_OPERATIONS_TLS_ENABLED=true
-      - ORDERER_OPERATIONS_TLS_CERT_FILE=/var/hyperledger/orderer/tls/signcerts/cert.pem # 使用 TLS 证书
-      - ORDERER_OPERATIONS_TLS_KEY_FILE=/var/hyperledger/orderer/tls/keystore/key.pem   # 使用 TLS 私钥
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true                # ← 新增：启用 Admin API 的 TLS
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:9443     # ← 修改：osnadmin 连接这个端口
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/signcerts/cert.pem
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/keystore/key.pem
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/tlscacerts/tls-localhost-7052.pem]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/tlscacerts/tls-localhost-7052.pem] # 允许这个 CA 签发的客户端证书访问 Admin API
 
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/keystore/key.pem
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/signcerts/cert.pem
@@ -35,7 +36,7 @@ services:
       - ../../config/channel-artifacts/gen-mychannel.block:/var/hyperledger/orderer/genesis.block # Orderer 在启动时需要一个初始的区块来引导网络
     ports:
       - 7050:7050
-      - 8443:8443  # 管理 API 端口 (osnadmin 需要连接这个端口)
+      - 9443:9443  # 管理 API 端口 (osnadmin 需要连接这个端口)
     networks:
       - fabric-org0
 

@@ -171,6 +171,7 @@ initOrderer() {
   local ORG_CA_PORT=$3
   local TLS_CA_PORT=$4
   local ORG_DOMAIN="org0.example.com"
+
   local ORDERER_DIR=${ROOT_DIR}/organizations/ordererOrganizations/${ORG_DOMAIN}/orderers/${ORDERER_NAME}.${ORG_DOMAIN}
 
   mkdir -p ${ORDERER_DIR}/msp ${ORDERER_DIR}/tls
@@ -197,7 +198,7 @@ initOrderer() {
       OrganizationalUnitIdentifier: peer
     AdminOUIdentifier:
       OrganizationalUnitIdentifier: admin
-    OrdererOUIdentifier: # Orderer MSP 需要识别自己是 Orderer
+    OrdererOUIdentifier: 
       OrganizationalUnitIdentifier: orderer
 EOF
   # fix key name
@@ -258,7 +259,11 @@ initUser() {
   local ORG_CA_PORT=$3
   local ORG=$4
   local ORG_DOMAIN="${ORG}.example.com"
-  local USER_DIR=${ROOT_DIR}/organizations/peerOrganizations/${ORG_DOMAIN}/users/${USER_NAME}@${ORG_DOMAIN}
+  if [[ $ORG == org* ]]; then
+    local USER_DIR=${ROOT_DIR}/organizations/ordererOrganizations/${ORG_DOMAIN}/users/${USER_NAME}@${ORG_DOMAIN}
+  else
+    local USER_DIR=${ROOT_DIR}/organizations/peerOrganizations/${ORG_DOMAIN}/users/${USER_NAME}@${ORG_DOMAIN}
+  fi
 
   mkdir -p ${USER_DIR}/msp
   local first_four_chars="${USER_NAME:0:4}"  # 提取前4个字符  
@@ -275,8 +280,33 @@ initUser() {
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/${ORG}/crypto/ca-cert.pem
   export FABRIC_CA_CLIENT_MSPDIR=msp
   fabric-ca-client enroll -d -u https://${USER_NAME}:${USER_PW}@localhost:${ORG_CA_PORT} --csr.names OU=${identity}
-}
 
+  # TLS enroll 
+  export FABRIC_CA_CLIENT_MSPDIR=tls
+  export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/tls-ca/crypto/tls-cert.pem
+  fabric-ca-client enroll -d -u https://${USER_NAME}:${USER_PW}@localhost:7052 \
+    --enrollment.profile tls \
+    --csr.hosts ${USER_NAME}.${ORG_DOMAIN},localhost
+
+
+  # 修改私钥名称
+  if [ -d "${USER_DIR}/msp/keystore" ]; then
+    USER_KEY=$(ls ${USER_DIR}/msp/keystore/*_sk 2>/dev/null | head -n 1)
+    if [ -n "$USER_KEY" ] && [ -f "$USER_KEY" ]; then
+      mv "$USER_KEY" ${USER_DIR}/msp/keystore/key.pem
+      echo "Renamed user key to ${USER_DIR}/msp/keystore/key.pem"
+    else
+      echo "Warning: User private key not found in ${USER_DIR}/msp/keystore/"
+    fi
+  else
+    echo "Warning: User keystore directory not found: ${USER_DIR}/msp/keystore/"
+  fi
+  TLS_KEY=$(ls ${USER_DIR}/tls/keystore/*_sk 2>/dev/null | head -n 1)
+  if [ -n "$TLS_KEY" ]; then
+    mv "$TLS_KEY" ${USER_DIR}/tls/keystore/key.pem
+  fi
+}
+  
 # -------------------------------
 # 全流程示例
 # -------------------------------
@@ -311,15 +341,16 @@ runTest() {
   enrollCA "rca-org0-admin" "rca-org0-adminpw" 7053 "org0"
   
   # 注册 Orderer 身份到 RCA 和 TLS
-  registerMSPIdentity 7053 "orderer1-org0" "ordererpw" "orderer" "org0"
-  registerTLSIdentity 7052 "orderer1-org0" "ordererpw" "orderer"
+  registerMSPIdentity 7053 "orderer1-org0" "ordererPW" "orderer" "org0"
+  registerTLSIdentity 7052 "orderer1-org0" "ordererPW" "orderer"
 
-  registerMSPIdentity 7053 "Admin-org0" "org0AdminPW" "admin" "org0" "" # 注册 Org Admin
+  registerMSPIdentity 7053 "Admin-org0" "org0AdminPW" "admin" "org0"  # 注册 Org Admin
+  registerTLSIdentity 7052 "Admin-org0" "org0AdminPW" "admin"
   
 
   # 初始化 Orderer MSP 和 TLS
   initUser "Admin-org0" "org0AdminPW" 7053 "org0"
-  initOrderer "orderer1-org0" "ordererpw" 7053 7052
+  initOrderer "orderer1-org0" "ordererPW" 7053 7052
     # Buyer Organization
   echo "==== 初始化 Buyer1 ===="
   # 为 buyer1 执行 enrollCA
@@ -418,11 +449,23 @@ runTest() {
   docker compose -f ./docker/supplier1/docker-compose-supplier1.yaml up -d
   docker compose -f ./docker/warehouse1/docker-compose-warehouse1.yaml up -d
   docker compose -f ./docker/bank1/docker-compose-bank1.yaml up -d
-  
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  waitFile "./config/changePeer/orderer1-org0-setEnv.sh"
+  waitFile "./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/msp/keystore/key.pem" 
   echo "====6️⃣ create mychannel===="
-  ./config/changePeer/orderer1-org0-setEnv.sh
-  osnadmin channel join --channelID genesis-block --config-block ./config/channel-artifacts/gen-mychannel.block --orderer-address localhost:8443 --ca-file "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem" --client-cert "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem" --client-key "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/keystore/key.pem"
-  ./config/changePeer/peer1-buyer1-setEnv.sh
+  source ${ROOT_DIR}/config/changePeer/orderer1-org0-setEnv.sh
+
+  osnadmin channel join \
+    --channelID genesis-block \
+    --config-block ./config/channel-artifacts/gen-mychannel.block \
+    --orderer-address localhost:9443 \
+    --ca-file ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem \
+    --client-cert ./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/tls/signcerts/cert.pem \
+    --client-key ./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/tls/keystore/key.pem
+#  osnadmin channel join --channelID genesis-block --config-block ./config/channel-artifacts/gen-mychannel.block  --orderer-address localhost:9443 --ca-file "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem" --client-cert "./organizations/peerOrganizations/org0.example.com/users/Admin-org0@org0.example.com/msp/signcerts/cert.pem" --client-key "./organizations/peerOrganizations/org0.example.com/users/Admin-org0@org0.example.com/msp/keystore/key.pem"        
+
+
+  source ${ROOT_DIR}/config/changePeer/peer1-buyer1-setEnv.sh
   peer channel create -o orderer1-org0:7050 -c mychannel -f ./config/channel-artifacts/channel.tx --outputBlock ./config/channel-artifacts/mychannel.block --cafile ./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem
   echo "====create mychannel Done===="
   
@@ -430,16 +473,16 @@ runTest() {
   #change peer to join mychannel
   peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
 
-  ./config/changePeer/peer1-logistics1-setEnv.sh 
+  source ${ROOT_DIR}/config/changePeer/peer1-logistics1-setEnv.sh 
   peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
 
-  ./config/changePeer/peer1-supplier1-setEnv.sh
+  source ${ROOT_DIR}/config/changePeer/peer1-supplier1-setEnv.sh
   peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
 
-  ./config/changePeer/peer1-warehouse1-setEnv.sh
+  source ${ROOT_DIR}/config/changePeer/peer1-warehouse1-setEnv.sh
   peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
 
-  ./config/changePeer/peer1-bank1-setEnv.sh
+  source ${ROOT_DIR}/config/changePeer/peer1-bank1-setEnv.sh
   peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
 
 
