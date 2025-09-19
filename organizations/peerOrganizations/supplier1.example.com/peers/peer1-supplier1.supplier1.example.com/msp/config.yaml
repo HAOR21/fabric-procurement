@@ -1,0 +1,10 @@
+  NodeOUs:
+    Enable: true
+    ClientOUIdentifier:
+      OrganizationalUnitIdentifier: client
+    PeerOUIdentifier: # Peer MSP 需要识别自己是 Peer
+      OrganizationalUnitIdentifier: peer
+    AdminOUIdentifier:
+      OrganizationalUnitIdentifier: admin
+    OrdererOUIdentifier: # 可选，如果需要验证 Orderer 证书
+      OrganizationalUnitIdentifier: orderer
