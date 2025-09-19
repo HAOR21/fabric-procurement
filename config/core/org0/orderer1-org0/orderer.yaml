@@ -1,0 +1,39 @@
+General:
+  ListenAddress: 0.0.0.0
+  ListenPort: 7050
+  LocalMSPID: Org0MSP
+  LocalMSPDir: /var/hyperledger/orderer/msp
+  TLS:
+    Enabled: true
+    PrivateKey: /var/hyperledger/orderer/tls/keystore/key.pem
+    Certificate: /var/hyperledger/orderer/tls/signcerts/cert.pem
+    RootCAs:
+      - /var/hyperledger/orderer/tls/tlscacerts/tls-localhost-7052.pem
+
+  GenesisMethod: file
+  GenesisFile: /var/hyperledger/orderer/genesis.block
+
+  # Admin API 配置
+  Admin:
+    Enabled: true
+    ListenAddress: 0.0.0.0:9443
+    TLS:
+      Enabled: true
+      PrivateKey: /var/hyperledger/orderer/tls/keystore/key.pem
+      Certificate: /var/hyperledger/orderer/tls/signcerts/cert.pem
+      RootCAs:
+        - /var/hyperledger/orderer/tls/tlscacerts/tls-localhost-7052.pem
+      ClientRootCAs:
+        - /var/hyperledger/orderer/tls/tlscacerts/tls-localhost-7052.pem
+
+Logging:
+  Level: debug
+
+BCCSP:
+  Default: SW
+  SW:
+    Hash: SHA2
+    Security: 256
+    FileKeyStore:
+      KeyStore: /var/hyperledger/orderer/msp/keystore
+

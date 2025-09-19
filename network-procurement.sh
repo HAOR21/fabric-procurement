@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-
+export FABRIC_LOGGING_SPEC=DEBUG
 # -------------------------------
 # 工具函数
 # -------------------------------
@@ -453,39 +453,51 @@ runTest() {
   waitFile "./config/changePeer/orderer1-org0-setEnv.sh"
   waitFile "./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/msp/keystore/key.pem" 
   echo "====6️⃣ create mychannel===="
-  source ${ROOT_DIR}/config/changePeer/orderer1-org0-setEnv.sh
+#  source ${ROOT_DIR}/config/changePeer/orderer1-org0-setEnv.sh
 
-  osnadmin channel join \
-    --channelID genesis-block \
-    --config-block ./config/channel-artifacts/gen-mychannel.block \
-    --orderer-address localhost:9443 \
-    --ca-file ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem \
-    --client-cert ./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/tls/signcerts/cert.pem \
-    --client-key ./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/tls/keystore/key.pem
+#  osnadmin channel join \
+#    --channelID genesis-block \
+#    --config-block ./config/channel-artifacts/gen-mychannel.block \
+#    --orderer-address localhost:9443 \
+#    --ca-file ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem \
+#    --client-cert ./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/tls/signcerts/cert.pem \
+#    --client-key ./organizations/ordererOrganizations/org0.example.com/users/Admin-org0@org0.example.com/tls/keystore/key.pem
 #  osnadmin channel join --channelID genesis-block --config-block ./config/channel-artifacts/gen-mychannel.block  --orderer-address localhost:9443 --ca-file "./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem" --client-cert "./organizations/peerOrganizations/org0.example.com/users/Admin-org0@org0.example.com/msp/signcerts/cert.pem" --client-key "./organizations/peerOrganizations/org0.example.com/users/Admin-org0@org0.example.com/msp/keystore/key.pem"        
+  echo ">>>>>>>>>>>>>>>>>osnadmin join channel done"
+  echo "====create mychannel===="
 
+  source ./config/changePeer/peer1-buyer1-setEnv.sh
+# 创建通道
+  peer channel create \
+    -o localhost:7050 \
+    --ordererTLSHostnameOverride orderer1-org0.org0.example.com \
+    -c mychannel \
+    -f ./config/channel-artifacts/channel.tx \
+    --outputBlock ./config/channel-artifacts/mychannel.block \
+    --cafile ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem \
+    --tls  
 
-  source ${ROOT_DIR}/config/changePeer/peer1-buyer1-setEnv.sh
-  peer channel create -o orderer1-org0:7050 -c mychannel -f ./config/channel-artifacts/channel.tx --outputBlock ./config/channel-artifacts/mychannel.block --cafile ./organizations/fabric-ca/ca-org0/crypto/ca-cert.pem
   echo "====create mychannel Done===="
-  
+  echo ">>>>>>>>>>>>>>>create mychannel done"
   echo "====7️⃣ join mychannel===="
-  #change peer to join mychannel
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
-
-  source ${ROOT_DIR}/config/changePeer/peer1-logistics1-setEnv.sh 
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
-
-  source ${ROOT_DIR}/config/changePeer/peer1-supplier1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
-
-  source ${ROOT_DIR}/config/changePeer/peer1-warehouse1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1-org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
-
-  source ${ROOT_DIR}/config/changePeer/peer1-bank1-setEnv.sh
-  peer channel join --blockfile ./config/channel-artifacts/mychannel.block --channelID mychannel --orderer orderer1.org0:7050 --tls --cafile ${FABRIC_TLS_ORG0}
-
-
+  
+  PEERS=("peer1-buyer1" "peer1-logistics1" "peer1-supplier1" "peer1-warehouse1" "peer1-bank1")
+  
+  # 循环让每个 peer 加入通道
+  for peer in "${PEERS[@]}"; do
+    echo "Joining $peer to channel..."
+  
+    # 加载对应 peer 的环境变量
+    source ./config/changePeer/${peer}-setEnv.sh
+  
+    # 执行 join
+    peer channel join \
+      --blockfile ./config/channel-artifacts/mychannel.block \
+      --channelID mychannel \
+      --orderer localhost:7050 \
+      --tls \
+      --cafile ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem
+  done
   echo "==== 全流程 runTest 完成 ===="
 }
 
@@ -508,7 +520,8 @@ down() {
   echo "- 清理可能遗留的链码容器与镜像"
   docker ps -a --filter name=dev- -q | xargs -r docker rm -f || true
   docker images --filter reference='dev-*' -q | xargs -r docker rmi -f || true
-
+  docker volume prune -f
+  docker network prune -f
   # 3) 删除生成的通道文件、组织密钥材料与本地数据
   echo "- 删除生成的通道文件与组织目录"
   rm -rf ./config/channel-artifacts/* || true

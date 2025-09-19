@@ -2,7 +2,7 @@ services:
   peer1-buyer1:
     container_name: peer1-buyer1       # 容器名称
     image: hyperledger/fabric-peer     # 使用的 peer 镜像
-    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+#    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     environment:                       # Peer 的环境变量配置
       - CORE_PEER_ID=peer1-buyer1     # Peer 的唯一标识符
       - CORE_PEER_ADDRESS=peer1-buyer1:7051  # Peer 监听的主机名和端口（对外服务）
@@ -11,6 +11,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock  # Docker 运行 chaincode 的本地接口
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-buyer1  # Docker 网络模式
       - FABRIC_LOGGING_SPEC=debug    # 日志等级
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_TLS_ENABLED=true   # 启用 TLS
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/signcerts/cert.pem # Peer TLS 证书
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/keystore/key.pem # Peer TLS 私钥
@@ -23,6 +24,7 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1-buyer1:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+#      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
 
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/buyer1/peer1  # 容器工作目录
     volumes:
@@ -34,6 +36,14 @@ services:
       - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls:/etc/hyperledger/tls
   # 3. TLS-CA 根证书路径
       - ../../organizations/fabric-ca/tls-ca/crypto:/etc/hyperledger/tlsca
+      - ../../config/channel-artifacts:/etc/hyperledger/channel-artifacts
+      - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls:/etc/hyperledger/ordererOrg0/tls #挂载排序节点的TLS证书，Peer 需要验证 Orderer的身份
+#      - ../../config/core/buyer1/peer1-buyer1:/etc/hyperledger/fabric/config/core/buyer1/peer1-buyer1
+
+
+    ports:
+      - "7051:7051"     # Peer1 buyer1
+      - "5984:5984"     # CouchDB for Peer1 buyer1
     networks:
       - fabric-buyer1  
       - fabric-org0
@@ -45,9 +55,12 @@ services:
       - COUCHDB_USER=admin
       - COUCHDB_PASSWORD=adminpw
     networks:
-      - fabric-buyer1    # 与 Peer1 在同一网络 
+      - fabric-buyer1    
+
 networks:
   fabric-org0:
-    driver: bridge
+    external: true
+    name: fabric-org0
   fabric-buyer1:
     driver: bridge
+    name: fabric-buyer1

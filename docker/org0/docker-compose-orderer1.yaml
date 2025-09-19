@@ -2,7 +2,7 @@ services:
   orderer1-org0:
     container_name: orderer1-org0
     image: hyperledger/fabric-orderer
-    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+#    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -10,6 +10,7 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=Org0MSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true 
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       # >>>>>>>>>> 添加管理 API 配置 <<<<<<<<<<
       # 启用管理 API
       - ORDERER_CHANNELPARTICIPATION_ENABLED=true
@@ -34,6 +35,8 @@ services:
       - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls:/var/hyperledger/orderer/tls
       - ../../organizations/fabric-ca/tls-ca/crypto:/var/hyperledger/orderer/tlsca
       - ../../config/channel-artifacts/gen-mychannel.block:/var/hyperledger/orderer/genesis.block # Orderer 在启动时需要一个初始的区块来引导网络
+#      - ../../config/core/org0/orderer1-org0:/etc/hyperledger/fabric/config/core/org0/orderer1-org0
+
     ports:
       - 7050:7050
       - 9443:9443  # 管理 API 端口 (osnadmin 需要连接这个端口)
@@ -42,5 +45,7 @@ services:
 
 networks:
   fabric-org0:
+    name: fabric-org0
     driver: bridge
+    
 

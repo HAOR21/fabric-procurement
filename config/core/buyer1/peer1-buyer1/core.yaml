@@ -1,0 +1,12 @@
+peer:
+  id: peer1-buyer1
+  networkId: dev
+  address: 0.0.0.0:7051
+  localMspId: Buyer1MSP
+BCCSP:
+  Default: SW
+  SW:
+    Hash: SHA2
+    Security: 256
+    FileKeyStore:
+      KeyStore: /etc/hyperledger/msp/keystore

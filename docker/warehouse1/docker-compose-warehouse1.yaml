@@ -2,7 +2,7 @@ services:
   peer1-warehouse1:
     container_name: peer1-warehouse1
     image: hyperledger/fabric-peer
-    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
+#    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     environment:
       - CORE_PEER_ID=peer1-warehouse1
       - CORE_PEER_ADDRESS=peer1-warehouse1:7051
@@ -11,6 +11,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-warehouse1
       - FABRIC_LOGGING_SPEC=debug
+      - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/signcerts/cert.pem
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/keystore/key.pem
@@ -31,6 +32,13 @@ services:
       - ../../organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/msp:/etc/hyperledger/msp
       - ../../organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/tls:/etc/hyperledger/tls
       - ../../organizations/fabric-ca/tls-ca/crypto:/etc/hyperledger/tlsca
+      - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls:/etc/hyperledger/ordererOrg0/tls #挂载排序节点的TLS证书，Peer 需要验证 Orderer的身份
+      - ../../config/channel-artifacts:/etc/hyperledger/channel-artifacts
+#      - ../../config/core/warehouse1/peer1-warehouse1:/etc/hyperledger/fabric/config/core/warehouse1/peer1-warehouse1
+ 
+    ports:
+      - "11051:7051"    
+      - "9984:5984"     
     networks:
       - fabric-warehouse1
       - fabric-org0
@@ -46,7 +54,9 @@ services:
 
 networks:
   fabric-warehouse1:
+    name: fabric-warehouse1
     driver: bridge
   fabric-org0:
-    driver: bridge
+    external: true
+    name: fabric-org0
 
