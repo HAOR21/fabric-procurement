@@ -12,8 +12,8 @@ export FABRIC_CFG_PATH=$PROJECT_ROOT/config/core/warehouse1/peer1-warehouse1
 
 export CORE_PEER_TLS_ENABLED=true
 export CORE_PEER_LOCALMSPID=Warehouse1MSP
-export CORE_PEER_TLS_ROOTCERT_FILE=$PROJECT_ROOT/organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/tls/tlscacerts/tls-localhost-7052.pem
-export CORE_PEER_ADDRESS=localhost:11051
+export CORE_PEER_TLS_ROOTCERT_FILE=$PROJECT_ROOT/organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/tls/ca.crt
+export CORE_PEER_ADDRESS=peer1-warehouse1:11051
 export CORE_PEER_MSPCONFIGPATH=$PROJECT_ROOT/organizations/peerOrganizations/warehouse1.example.com/users/Admin-warehouse1@warehouse1.example.com/msp #这里需要指向具体身份的MSp文件来>表明客户端的身份
 
 

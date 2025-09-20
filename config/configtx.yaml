@@ -136,8 +136,8 @@ Orderer: &OrdererDefaults
     Consenters:
       - Host: orderer1-org0
         Port: 7050
-        ClientTLSCert: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem
-        ServerTLSCert: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/signcerts/cert.pem
+        ClientTLSCert: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/server.crt
+        ServerTLSCert: ../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/server.crt
   Organizations:
   Policies:
     Readers:

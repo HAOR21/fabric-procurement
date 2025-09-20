@@ -13,9 +13,9 @@ services:
       - FABRIC_LOGGING_SPEC=debug    # 日志等级
       - FABRIC_CFG_PATH=/etc/hyperledger/fabric
       - CORE_PEER_TLS_ENABLED=true   # 启用 TLS
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/signcerts/cert.pem # Peer TLS 证书
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/keystore/key.pem # Peer TLS 私钥
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tlsca/tls-cert.pem # TLS 根证书
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/server.crt # Peer TLS 证书
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/server.key # Peer TLS 私钥
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tls/ca.crt  # TLS 根证书
       - CORE_PEER_GOSSIP_USELEADERELECTION=true   # 启用 leader election
       - CORE_PEER_GOSSIP_ORGLEADER=false         # 本节点不是组织 leader
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-buyer1:7051  # 节点对外广播地址

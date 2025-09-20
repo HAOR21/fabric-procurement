@@ -180,30 +180,40 @@ initOrderer() {
   export FABRIC_CA_CLIENT_HOME=${ORDERER_DIR}
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/org0/crypto/ca-cert.pem
   export FABRIC_CA_CLIENT_MSPDIR=msp
-  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${ORDERER_NAME}.${ORG_DOMAIN} --csr.names OU=orderer
+  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${ORDERER_NAME} --csr.names OU=orderer
 
   # TLS
   export FABRIC_CA_CLIENT_MSPDIR=tls
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/tls-ca/crypto/tls-cert.pem
 
-  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${ORDERER_NAME}.${ORG_DOMAIN},localhost
+  fabric-ca-client enroll -d -u https://${ORDERER_NAME}:${ORDERER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${ORDERER_NAME},localhost
 
   # >>>>>>>>>> 添加生成 config.yaml <<<<<<<<<<
-  cat <<EOF > "${ORDERER_DIR}/msp/config.yaml"
-  NodeOUs:
-    Enable: true
-    ClientOUIdentifier:
-      OrganizationalUnitIdentifier: client
-    PeerOUIdentifier:
-      OrganizationalUnitIdentifier: peer
-    AdminOUIdentifier:
-      OrganizationalUnitIdentifier: admin
-    OrdererOUIdentifier: 
-      OrganizationalUnitIdentifier: orderer
+cat <<EOF > "${ORDERER_DIR}/msp/config.yaml"
+NodeOUs:
+  Enable: true
+  ClientOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: client
+  PeerOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: peer
+  AdminOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: admin
+  OrdererOUIdentifier: 
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: orderer
 EOF
   # fix key name
-  TLS_KEY=$(ls ${ORDERER_DIR}/tls/keystore/*_sk)
-  mv $TLS_KEY ${ORDERER_DIR}/tls/keystore/key.pem
+  echo ">>>>>>>>>>>>>>>fix ORDERER key name done"
+  cp ${ORDERER_DIR}/tls/signcerts/cert.pem ${ORDERER_DIR}/tls/server.crt 
+  cp ${ORDERER_DIR}/tls/keystore/* ${ORDERER_DIR}/tls/server.key
+  cp ${ORDERER_DIR}/tls/tlscacerts/* ${ORDERER_DIR}/tls/ca.crt
+  sudo mkdir -p ${ORDERER_DIR}/msp/tlscacerts
+  sudo cp ${ORDERER_DIR}/tls/ca.crt ${ORDERER_DIR}/msp/tlscacerts/ca.crt # configtxgen 工具在生成通道配置时，会读取这个msp的 tlscacerts 文件夹，将里面的证书作为该组织的 TLS 根证书嵌入到通道配置中。所以需要复制过去
+
+  echo ">>>>>>>>>>>>>>>>>fix ORDERER key name done"
 }
 
 # -------------------------------
@@ -224,32 +234,40 @@ initPeer() {
   export FABRIC_CA_CLIENT_HOME=${PEER_DIR}
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/${ORG}/crypto/ca-cert.pem
   export FABRIC_CA_CLIENT_MSPDIR=msp
-  fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${PEER_NAME}.${ORG_DOMAIN} --csr.names OU=peer
+  fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${ORG_CA_PORT} --csr.hosts ${PEER_NAME} --csr.names OU=peer
 
   # TLS
   export FABRIC_CA_CLIENT_MSPDIR=tls
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/tls-ca/crypto/tls-cert.pem
-  fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${PEER_NAME}.${ORG_DOMAIN}
+  fabric-ca-client enroll -d -u https://${PEER_NAME}:${PEER_PW}@localhost:${TLS_CA_PORT} --enrollment.profile tls --csr.hosts ${PEER_NAME}
 
   # >>>>>>>>>> 添加生成 config.yaml <<<<<<<<<<
-  cat <<EOF > "${PEER_DIR}/msp/config.yaml"
-  NodeOUs:
-    Enable: true
-    ClientOUIdentifier:
-      OrganizationalUnitIdentifier: client
-    PeerOUIdentifier: # Peer MSP 需要识别自己是 Peer
-      OrganizationalUnitIdentifier: peer
-    AdminOUIdentifier:
-      OrganizationalUnitIdentifier: admin
-    OrdererOUIdentifier: # 可选，如果需要验证 Orderer 证书
-      OrganizationalUnitIdentifier: orderer
+cat <<EOF > "${PEER_DIR}/msp/config.yaml"
+NodeOUs:
+  Enable: true
+  ClientOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: client
+  PeerOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: peer
+  AdminOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: admin
+  OrdererOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: orderer
 EOF
-
   # fix key name
-  TLS_KEY=$(ls ${PEER_DIR}/tls/keystore/*_sk)
-  mv $TLS_KEY ${PEER_DIR}/tls/keystore/key.pem
-}
 
+  echo ">>>>>>>>>>>>>>>>>>fix PEER key name"
+  cp ${PEER_DIR}/tls/signcerts/cert.pem ${PEER_DIR}/tls/server.crt  
+  cp ${PEER_DIR}/tls/keystore/* ${PEER_DIR}/tls/server.key
+  cp ${PEER_DIR}/tls/tlscacerts/* ${PEER_DIR}/tls/ca.crt
+  sudo mkdir -p ${PEER_DIR}/msp/tlscacerts
+  sudo cp ${PEER_DIR}/tls/ca.crt ${PEER_DIR}/msp/tlscacerts/ca.crt # configtxgen 工具在生成通道配置时，会读取这个msp的 tlscacerts 文件夹，将里面的证书作为该组织的 TLS 根证书嵌入到通道配置中。所以需要复制过去
+  echo ">>>>>>>>>>>>>>>>>fix PEER key name done"
+}
 # -------------------------------
 # 初始化 User (Admin/User)
 # -------------------------------
@@ -286,8 +304,7 @@ initUser() {
   export FABRIC_CA_CLIENT_TLS_CERTFILES=${ROOT_DIR}/organizations/fabric-ca/tls-ca/crypto/tls-cert.pem
   fabric-ca-client enroll -d -u https://${USER_NAME}:${USER_PW}@localhost:7052 \
     --enrollment.profile tls \
-    --csr.hosts ${USER_NAME}.${ORG_DOMAIN},localhost
-
+    --csr.hosts ${USER_NAME},localhost
 
   # 修改私钥名称
   if [ -d "${USER_DIR}/msp/keystore" ]; then
@@ -301,10 +318,31 @@ initUser() {
   else
     echo "Warning: User keystore directory not found: ${USER_DIR}/msp/keystore/"
   fi
-  TLS_KEY=$(ls ${USER_DIR}/tls/keystore/*_sk 2>/dev/null | head -n 1)
-  if [ -n "$TLS_KEY" ]; then
-    mv "$TLS_KEY" ${USER_DIR}/tls/keystore/key.pem
-  fi
+ 
+cat <<EOF > "${USER_DIR}/msp/config.yaml"
+NodeOUs:
+  Enable: true
+  ClientOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: client
+  PeerOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: peer
+  AdminOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: admin
+  OrdererOUIdentifier:
+    Certificate: cacerts/localhost-${ORG_CA_PORT}.pem
+    OrganizationalUnitIdentifier: orderer
+EOF
+
+ # fix key name
+  echo ">>>>>>>>>>>>>>>>>>fix USER key name"
+  cp ${USER_DIR}/tls/signcerts/cert.pem ${USER_DIR}/tls/server.crt       
+  cp ${USER_DIR}/tls/keystore/* ${USER_DIR}/tls/server.key
+  cp ${USER_DIR}/tls/tlscacerts/* ${USER_DIR}/tls/ca.crt
+
+  echo ">>>>>>>>>>>>>>>>>fix USER key name done"
 }
   
 # -------------------------------
@@ -323,7 +361,7 @@ runTest() {
   export LOCAL_UID=$(id -u)
   export LOCAL_GID=$(id -g)
   export PATH=$PATH:${ROOT_DIR}/fabric-bin/bin
-  export FABRIC_TLS_ORG0=./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem
+  export FABRIC_TLS_ORG0=./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/ca.crt
   echo "====1️⃣ Run CA server ===="
   runCAServer
 
@@ -466,15 +504,29 @@ runTest() {
   echo ">>>>>>>>>>>>>>>>>osnadmin join channel done"
   echo "====create mychannel===="
 
+  Peers=("orderer1-org0" "peer1-buyer1" "peer1-logistics1" "peer1-supplier1" "peer1-warehouse1" "peer1-bank1")
+  # 添加 /etc/hosts 映射
+  echo ">>> 添加 /etc/hosts 映射"
+  for peer in "${Peers[@]}"; do
+    if ! grep -q "$peer" /etc/hosts; then
+      echo "127.0.0.1   $peer" | sudo tee -a /etc/hosts >/dev/null
+      echo "已映射 $peer -> 127.0.0.1"
+    fi
+  done
+
   source ./config/changePeer/peer1-buyer1-setEnv.sh
+
+  ORDERER_CA=$PROJECT_ROOT/organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/ca.crt #使用相对路径时，peer channel create --cafile会将FABRIC_CFG_PATH作为前缀，导致路线拼接错误
+
+
 # 创建通道
   peer channel create \
     -o localhost:7050 \
-    --ordererTLSHostnameOverride orderer1-org0.org0.example.com \
+    --ordererTLSHostnameOverride orderer1-org0 \
     -c mychannel \
     -f ./config/channel-artifacts/channel.tx \
     --outputBlock ./config/channel-artifacts/mychannel.block \
-    --cafile ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem \
+    --cafile "${ORDERER_CA}" \
     --tls  
 
   echo "====create mychannel Done===="
@@ -482,21 +534,18 @@ runTest() {
   echo "====7️⃣ join mychannel===="
   
   PEERS=("peer1-buyer1" "peer1-logistics1" "peer1-supplier1" "peer1-warehouse1" "peer1-bank1")
-  
   # 循环让每个 peer 加入通道
   for peer in "${PEERS[@]}"; do
     echo "Joining $peer to channel..."
   
     # 加载对应 peer 的环境变量
     source ./config/changePeer/${peer}-setEnv.sh
-  
     # 执行 join
     peer channel join \
-      --blockfile ./config/channel-artifacts/mychannel.block \
-      --channelID mychannel \
+      --blockpath ./config/channel-artifacts/mychannel.block \
       --orderer localhost:7050 \
       --tls \
-      --cafile ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/tlscacerts/tls-localhost-7052.pem
+      --cafile ./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/ca.crt
   done
   echo "==== 全流程 runTest 完成 ===="
 }
@@ -526,7 +575,7 @@ down() {
   echo "- 删除生成的通道文件与组织目录"
   rm -rf ./config/channel-artifacts/* || true
   sudo rm -rf ./organizations || true
-  rm -rf ./data || true
+  sudo rm -rf ./data || true
 
   # 4) 取消设置脚本内导出的环境变量，恢复到初始环境
   echo "- 清理环境变量"
@@ -534,6 +583,13 @@ down() {
   unset ORDERER_ADDRESS ORDERER_CA ORDERER_ADMIN_TLS_SIGN_CERT ORDERER_ADMIN_TLS_PRIVATE_KEY || true
   unset FABRIC_TLS_ORG0 CORE_PEER_TLS_ENABLED CORE_PEER_LOCALMSPID CORE_PEER_TLS_ROOTCERT_FILE CORE_PEER_ADDRESS CORE_PEER_MSPCONFIGPATH || true
   unset PROJECT_ROOT || true
+
+  echo ">>> 删除 /etc/hosts 映射"
+  PEERS=("orderer1-org0" "peer1-buyer1" "peer1-logistics1" "peer1-supplier1" "peer1-warehouse1" "peer1-bank1")
+  for peer in "${PEERS[@]}"; do
+    sudo sed -i "/$peer/d" /etc/hosts
+    echo "已删除 $peer 的映射"
+  done
 
   # 恢复严格模式
   set -e

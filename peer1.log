@@ -1,0 +1,600 @@
+[36m2025-09-19 10:29:45.672 UTC 0001 DEBU[0m [bccsp] [36;1mGetDefault[0m -> Before using BCCSP, please call InitFactories(). Falling back to bootBCCSP.
+[36m2025-09-19 10:29:45.672 UTC 0002 DEBU[0m [bccsp] [36;1mGetDefault[0m -> Before using BCCSP, please call InitFactories(). Falling back to bootBCCSP.
+[36m2025-09-19 10:29:45.681 UTC 0003 DEBU[0m [bccsp] [36;1mGetDefault[0m -> Before using BCCSP, please call InitFactories(). Falling back to bootBCCSP.
+[36m2025-09-19 10:29:45.688 UTC 0004 DEBU[0m [bccsp_sw] [36;1mopenKeyStore[0m -> KeyStore opened at [/etc/hyperledger/msp/keystore]...done
+[36m2025-09-19 10:29:45.688 UTC 0005 DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Reading directory /etc/hyperledger/msp/signcerts
+[36m2025-09-19 10:29:45.688 UTC 0006 DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Inspecting file /etc/hyperledger/msp/signcerts/cert.pem
+[36m2025-09-19 10:29:45.688 UTC 0007 DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Reading directory /etc/hyperledger/msp/cacerts
+[36m2025-09-19 10:29:45.688 UTC 0008 DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Inspecting file /etc/hyperledger/msp/cacerts/localhost-7054.pem
+[36m2025-09-19 10:29:45.689 UTC 0009 DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Reading directory /etc/hyperledger/msp/admincerts
+[36m2025-09-19 10:29:45.689 UTC 000a DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Reading directory /etc/hyperledger/msp/intermediatecerts
+[36m2025-09-19 10:29:45.689 UTC 000b DEBU[0m [msp] [36;1mgetMspConfig[0m -> Intermediate certs folder not found at [/etc/hyperledger/msp/intermediatecerts]. Skipping. [stat /etc/hyperledger/msp/intermediatecerts: no such file or directory]
+[36m2025-09-19 10:29:45.689 UTC 000c DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Reading directory /etc/hyperledger/msp/tlscacerts
+[36m2025-09-19 10:29:45.689 UTC 000d DEBU[0m [msp] [36;1mgetMspConfig[0m -> TLS CA certs folder not found at [/etc/hyperledger/msp/tlsintermediatecerts]. Skipping and ignoring TLS intermediate CA folder. [stat /etc/hyperledger/msp/tlscacerts: no such file or directory]
+[36m2025-09-19 10:29:45.689 UTC 000e DEBU[0m [msp] [36;1mgetPemMaterialFromDir[0m -> Reading directory /etc/hyperledger/msp/crls
+[36m2025-09-19 10:29:45.689 UTC 000f DEBU[0m [msp] [36;1mgetMspConfig[0m -> crls folder not found at [/etc/hyperledger/msp/crls]. Skipping. [stat /etc/hyperledger/msp/crls: no such file or directory]
+[36m2025-09-19 10:29:45.689 UTC 0010 DEBU[0m [msp] [36;1mgetMspConfig[0m -> Loading NodeOUs
+[36m2025-09-19 10:29:45.689 UTC 0011 DEBU[0m [msp] [36;1mloadCertificateAt[0m -> Specific certificate for ClientOU is not configured
+[36m2025-09-19 10:29:45.689 UTC 0012 DEBU[0m [msp] [36;1mloadCertificateAt[0m -> Specific certificate for PeerOU is not configured
+[36m2025-09-19 10:29:45.689 UTC 0013 DEBU[0m [msp] [36;1mloadCertificateAt[0m -> Specific certificate for AdminOU is not configured
+[36m2025-09-19 10:29:45.689 UTC 0014 DEBU[0m [msp] [36;1mloadCertificateAt[0m -> Specific certificate for OrdererOU is not configured
+[36m2025-09-19 10:29:45.689 UTC 0015 DEBU[0m [msp] [36;1mnewBccspMsp[0m -> Creating BCCSP-based MSP instance
+[36m2025-09-19 10:29:45.689 UTC 0016 DEBU[0m [msp] [36;1mNew[0m -> Creating Cache-MSP instance
+[36m2025-09-19 10:29:45.689 UTC 0017 DEBU[0m [msp] [36;1mloadLocalMSP[0m -> Created new local MSP
+[36m2025-09-19 10:29:45.689 UTC 0018 DEBU[0m [msp] [36;1mSetup[0m -> Setting up MSP instance Buyer1MSP
+[36m2025-09-19 10:29:45.690 UTC 0019 DEBU[0m [msp.identity] [36;1mnewIdentity[0m -> Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICGzCCAcKgAwIBAgIUJXgOUagUj4w21zWpTHI++M9wZfkwCgYIKoZIzj0EAwIw
+YjELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpyY2EtYnV5
+ZXIxMB4XDTI1MDkxOTEwMjQwMFoXDTQwMDkxNTEwMjQwMFowYjELMAkGA1UEBhMC
+VVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBlcmxlZGdl
+cjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpyY2EtYnV5ZXIxMFkwEwYHKoZI
+zj0CAQYIKoZIzj0DAQcDQgAE4nL1d8u9wXL2NjEl9YEbiMJmxFX9ziRFMlIGLf5r
+iXlC+e4aXg07RmdLDLpkGL7li/XAOjTieLFBF6oJa7aCTqNWMFQwDgYDVR0PAQH/
+BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYEFAc39BrtzqlKI3Py
+B3oEIvlRqUMyMA8GA1UdEQQIMAaHBH8AAAEwCgYIKoZIzj0EAwIDRwAwRAIgDXqh
+5Tr66w9W/puIa4NI1iN8ns1eOhK1I4PPccEwfgoCIGFgBsPsYrw6MWd163iIFmoI
+9iFtCcU75ZSX3iTHRKXW
+-----END CERTIFICATE-----
+[36m2025-09-19 10:29:45.690 UTC 001a DEBU[0m [msp.identity] [36;1mnewIdentity[0m -> Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICdjCCAh2gAwIBAgIUH3I8nlLrpgoiHBn1vJmI4+UgxsQwCgYIKoZIzj0EAwIw
+YjELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpyY2EtYnV5
+ZXIxMB4XDTI1MDkxOTEwMjQwMFoXDTI2MDkxOTEwMzAwMFowJjENMAsGA1UECxME
+cGVlcjEVMBMGA1UEAxMMcGVlcjEtYnV5ZXIxMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAERVWETcaf9dAvK6WF9dFzf7yDR3mUmk8IGV0F2CXG0N+6R8p0DIRMl2N4
+qSyjJpQJ8CuBIeEgg/OUxjSJFOGpa6OB7DCB6TAOBgNVHQ8BAf8EBAMCB4AwDAYD
+VR0TAQH/BAIwADAdBgNVHQ4EFgQUdR7FXrEtYtFfakG1o51OYk3Rds0wHwYDVR0j
+BBgwFoAUBzf0Gu3OqUojc/IHegQi+VGpQzIwKgYDVR0RBCMwIYIfcGVlcjEtYnV5
+ZXIxLmJ1eWVyMS5leGFtcGxlLmNvbTBdBggqAwQFBgcIAQRReyJhdHRycyI6eyJo
+Zi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6InBlZXIxLWJ1eWVy
+MSIsImhmLlR5cGUiOiJwZWVyIn19MAoGCCqGSM49BAMCA0cAMEQCIDyBkl7fxH1A
+1LsihOkJzsu/fYKLsCx0ddjkB0teaobZAiAuA7c/cFBJ6WS+pDd9F6v5FoaLFvUH
+pP/CDzr7lHw/Ew==
+-----END CERTIFICATE-----
+[36m2025-09-19 10:29:45.690 UTC 001b DEBU[0m [bccsp_sw] [36;1mloadPrivateKey[0m -> Loading private key [308118bb2586dc35167b82175fcdd19c7050472dad435ca27db4ef3e03bfe0a5] at [/etc/hyperledger/msp/keystore/308118bb2586dc35167b82175fcdd19c7050472dad435ca27db4ef3e03bfe0a5_sk]...
+[36m2025-09-19 10:29:45.691 UTC 001c DEBU[0m [msp.identity] [36;1mnewIdentity[0m -> Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICdjCCAh2gAwIBAgIUH3I8nlLrpgoiHBn1vJmI4+UgxsQwCgYIKoZIzj0EAwIw
+YjELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpyY2EtYnV5
+ZXIxMB4XDTI1MDkxOTEwMjQwMFoXDTI2MDkxOTEwMzAwMFowJjENMAsGA1UECxME
+cGVlcjEVMBMGA1UEAxMMcGVlcjEtYnV5ZXIxMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAERVWETcaf9dAvK6WF9dFzf7yDR3mUmk8IGV0F2CXG0N+6R8p0DIRMl2N4
+qSyjJpQJ8CuBIeEgg/OUxjSJFOGpa6OB7DCB6TAOBgNVHQ8BAf8EBAMCB4AwDAYD
+VR0TAQH/BAIwADAdBgNVHQ4EFgQUdR7FXrEtYtFfakG1o51OYk3Rds0wHwYDVR0j
+BBgwFoAUBzf0Gu3OqUojc/IHegQi+VGpQzIwKgYDVR0RBCMwIYIfcGVlcjEtYnV5
+ZXIxLmJ1eWVyMS5leGFtcGxlLmNvbTBdBggqAwQFBgcIAQRReyJhdHRycyI6eyJo
+Zi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6InBlZXIxLWJ1eWVy
+MSIsImhmLlR5cGUiOiJwZWVyIn19MAoGCCqGSM49BAMCA0cAMEQCIDyBkl7fxH1A
+1LsihOkJzsu/fYKLsCx0ddjkB0teaobZAiAuA7c/cFBJ6WS+pDd9F6v5FoaLFvUH
+pP/CDzr7lHw/Ew==
+-----END CERTIFICATE-----
+[36m2025-09-19 10:29:45.691 UTC 001d DEBU[0m [msp] [36;1msetupSigningIdentity[0m -> Signing identity expires at 2026-09-19 10:30:00 +0000 UTC
+[34m2025-09-19 10:29:45.691 UTC 001e INFO[0m [nodeCmd] [34;1mserve[0m -> Starting peer:
+ Version: v2.5.12
+ Commit SHA: af0b647
+ Go version: go1.23.5
+ OS/Arch: linux/amd64
+ Chaincode:
+  Base Docker Label: org.hyperledger.fabric
+  Docker Namespace: hyperledger
+[34m2025-09-19 10:29:45.736 UTC 001f INFO[0m [nodeCmd] [34;1mserve[0m -> Peer config with combined core.yaml settings and environment variable overrides:
+chaincode:
+  builder: $(DOCKER_NS)/fabric-ccenv:$(TWO_DIGIT_VERSION)
+  executetimeout: 30s
+  externalbuilders:
+  - name: ccaas_builder
+    path: /opt/hyperledger/ccaas_builder
+    propagateEnvironment:
+    - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG
+  golang:
+    dynamiclink: false
+    runtime: $(DOCKER_NS)/fabric-baseos:$(TWO_DIGIT_VERSION)
+  installtimeout: 300s
+  java:
+    runtime: $(DOCKER_NS)/fabric-javaenv:$(TWO_DIGIT_VERSION)
+  keepalive: 0
+  logging:
+    format: '%{color}%{time:2006-01-02 15:04:05.000 MST} [%{module}] %{shortfunc}
+      -> %{level:.4s} %{id:03x}%{color:reset} %{message}'
+    level: info
+    shim: warning
+  mode: net
+  node:
+    runtime: $(DOCKER_NS)/fabric-nodeenv:$(TWO_DIGIT_VERSION)
+  pull: false
+  startuptimeout: 300s
+  system:
+    _lifecycle: enable
+    cscc: enable
+    lscc: enable
+    qscc: enable
+ledger:
+  history:
+    enablehistorydatabase: true
+  pvtdatastore:
+    collelgprocdbbatchesinterval: 1000
+    collelgprocmaxdbbatchsize: 5000
+    deprioritizeddatareconcilerinterval: 60m
+    purgedkeyauditlogging: true
+    purgeinterval: 100
+  snapshots:
+    rootdir: /var/hyperledger/production/snapshots
+  state:
+    couchdbconfig:
+      cachesize: 64
+      couchdbaddress: couchdb.peer1-buyer1:5984
+      createglobalchangesdb: false
+      internalquerylimit: 1000
+      maxbatchupdatesize: 1000
+      maxretries: 3
+      maxretriesonstartup: 10
+      password: adminpw
+      requesttimeout: 35s
+      username: admin
+    statedatabase: CouchDB
+    totalquerylimit: 100000
+logging_level: ""
+metrics:
+  provider: disabled
+  statsd:
+    address: 127.0.0.1:8125
+    network: udp
+    writeinterval: 10s
+operations:
+  listenaddress: 127.0.0.1:9443
+  tls:
+    clientauthrequired: false
+    clientrootcas:
+      files: []
+    enabled: false
+peer:
+  address: peer1-buyer1:7051
+  addressautodetect: false
+  authentication:
+    timewindow: 15m
+  bccsp:
+    default: SW
+    sw:
+      hash: SHA2
+      security: 256
+  client:
+    conntimeout: 3s
+  deliveryclient:
+    blockgossipenabled: true
+    conntimeout: 3s
+    reconnectbackoffthreshold: 3600s
+    reconnecttotaltimethreshold: 3600s
+  discovery:
+    authcacheenabled: true
+    authcachemaxsize: 1000
+    authcachepurgeretentionratio: 0.75
+    enabled: true
+    orgmembersallowedaccess: false
+  filesystempath: /var/hyperledger/production
+  gateway:
+    broadcasttimeout: 30s
+    dialtimeout: 2m
+    enabled: true
+    endorsementtimeout: 30s
+  gossip:
+    aliveexpirationtimeout: 25s
+    alivetimeinterval: 5s
+    bootstrap: 127.0.0.1:7051
+    conntimeout: 2s
+    dialtimeout: 3s
+    digestwaittime: 1s
+    election:
+      leaderalivethreshold: 10s
+      leaderelectionduration: 5s
+      membershipsampleinterval: 1s
+      startupgraceperiod: 15s
+    externalendpoint: peer1-buyer1:7051
+    maxblockcounttostore: 10
+    maxconnectionattempts: 120
+    maxpropagationburstlatency: 10ms
+    maxpropagationburstsize: 10
+    membershiptrackerinterval: 5s
+    msgexpirationfactor: 20
+    orgleader: "false"
+    propagateiterations: 1
+    propagatepeernum: 3
+    publishcertperiod: 10s
+    publishstateinfointerval: 4s
+    pullinterval: 4s
+    pullpeernum: 3
+    pvtdata:
+      btlpullmargin: 10
+      implicitcollectiondisseminationpolicy:
+        maxpeercount: 1
+        requiredpeercount: 0
+      pullretrythreshold: 60s
+      pushacktimeout: 3s
+      reconcilebatchsize: 10
+      reconcilesleepinterval: 1m
+      reconciliationenabled: true
+      skippullinginvalidtransactionsduringcommit: false
+      transientstoremaxblockretention: 1000
+    reconnectinterval: 25s
+    recvbuffsize: 20
+    requeststateinfointerval: 4s
+    requestwaittime: 1500ms
+    responsewaittime: 2s
+    sendbuffsize: 200
+    skipblockverification: false
+    state:
+      batchsize: 10
+      blockbuffersize: 20
+      checkinterval: 10s
+      enabled: false
+      maxretries: 3
+      responsetimeout: 3s
+    useleaderelection: "true"
+  handlers:
+    authfilters:
+    - name: DefaultAuth
+    - name: ExpirationCheck
+    decorators:
+    - name: DefaultDecorator
+    endorsers:
+      escc:
+        name: DefaultEndorsement
+    validators:
+      vscc:
+        name: DefaultValidation
+  id: peer1-buyer1
+  keepalive:
+    client:
+      interval: 60s
+      timeout: 20s
+    deliveryclient:
+      interval: 60s
+      timeout: 20s
+    interval: 7200s
+    mininterval: 60s
+    timeout: 20s
+  limits:
+    concurrency:
+      deliverservice: 2500
+      endorserservice: 2500
+      gatewayservice: 500
+  listenaddress: 0.0.0.0:7051
+  localmspid: Buyer1MSP
+  localmsptype: bccsp
+  maxrecvmsgsize: 104857600
+  maxsendmsgsize: 104857600
+  mspconfigpath: /etc/hyperledger/msp
+  networkid: dev
+  profile:
+    enabled: false
+    listenaddress: 0.0.0.0:6060
+  tls:
+    cert:
+      file: /etc/hyperledger/tls/server.crt
+    clientauthrequired: false
+    clientrootcas:
+      files:
+      - tls/ca.crt
+    enabled: "true"
+    key:
+      file: /etc/hyperledger/tls/server.key
+    rootcert:
+      file: /etc/hyperledger/tls/ca.crt
+vm:
+  docker:
+    attachstdout: false
+    hostconfig:
+      logconfig:
+        config:
+          max-file: "5"
+          max-size: 50m
+        type: json-file
+      memory: 2147483648
+      networkmode: fabric-buyer1
+    tls:
+      ca:
+        file: docker/ca.crt
+      cert:
+        file: docker/tls.crt
+      enabled: false
+      key:
+        file: docker/tls.key
+  endpoint: unix:///host/var/run/docker.sock
+[36m2025-09-19 10:29:45.737 UTC 0020 DEBU[0m [nodeCmd] [36;1mserve[0m -> Environment variables:
+[36m2025-09-19 10:29:45.737 UTC 0021 DEBU[0m [nodeCmd] [36;1mserve[0m -> PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+[36m2025-09-19 10:29:45.737 UTC 0022 DEBU[0m [nodeCmd] [36;1mserve[0m -> HOSTNAME=911d578c5fdd
+[36m2025-09-19 10:29:45.737 UTC 0023 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+[36m2025-09-19 10:29:45.737 UTC 0024 DEBU[0m [nodeCmd] [36;1mserve[0m -> FABRIC_LOGGING_SPEC=debug
+[36m2025-09-19 10:29:45.737 UTC 0025 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_LOCALMSPID=Buyer1MSP
+[36m2025-09-19 10:29:45.737 UTC 0026 DEBU[0m [nodeCmd] [36;1mserve[0m -> FABRIC_CFG_PATH=/etc/hyperledger/fabric
+[36m2025-09-19 10:29:45.737 UTC 0027 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabric-buyer1
+[36m2025-09-19 10:29:45.737 UTC 0028 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1-buyer1:5984
+[36m2025-09-19 10:29:45.737 UTC 0029 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/tls/ca.crt
+[36m2025-09-19 10:29:45.737 UTC 002a DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_GOSSIP_SKIPHANDSHAKE=false
+[36m2025-09-19 10:29:45.737 UTC 002b DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_ADDRESS=peer1-buyer1:7051
+[36m2025-09-19 10:29:45.737 UTC 002c DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+[36m2025-09-19 10:29:45.737 UTC 002d DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1-buyer1:7051
+[36m2025-09-19 10:29:45.737 UTC 002e DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/tls/server.crt
+[36m2025-09-19 10:29:45.737 UTC 002f DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/tls/server.key
+[36m2025-09-19 10:29:45.737 UTC 0030 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp
+[36m2025-09-19 10:29:45.737 UTC 0031 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_GOSSIP_ORGLEADER=false
+[36m2025-09-19 10:29:45.737 UTC 0032 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_GOSSIP_USELEADERELECTION=true
+[36m2025-09-19 10:29:45.737 UTC 0033 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+[36m2025-09-19 10:29:45.737 UTC 0034 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_ID=peer1-buyer1
+[36m2025-09-19 10:29:45.737 UTC 0035 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_PEER_TLS_ENABLED=true
+[36m2025-09-19 10:29:45.737 UTC 0036 DEBU[0m [nodeCmd] [36;1mserve[0m -> CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+[36m2025-09-19 10:29:45.737 UTC 0037 DEBU[0m [nodeCmd] [36;1mserve[0m -> FABRIC_VER=v2.5.12
+[36m2025-09-19 10:29:45.737 UTC 0038 DEBU[0m [nodeCmd] [36;1mserve[0m -> HOME=/root
+[34m2025-09-19 10:29:45.773 UTC 0039 INFO[0m [peer] [34;1mgetLocalAddress[0m -> Auto-detected peer address: 172.26.0.3:7051
+[34m2025-09-19 10:29:45.773 UTC 003a INFO[0m [peer] [34;1mgetLocalAddress[0m -> Returning peer1-buyer1:7051
+[34m2025-09-19 10:29:45.776 UTC 003b INFO[0m [nodeCmd] [34;1minitGrpcSemaphores[0m -> concurrency limit for endorser service is 2500
+[34m2025-09-19 10:29:45.776 UTC 003c INFO[0m [nodeCmd] [34;1minitGrpcSemaphores[0m -> concurrency limit for deliver service is 2500
+[34m2025-09-19 10:29:45.777 UTC 003d INFO[0m [nodeCmd] [34;1minitGrpcSemaphores[0m -> concurrency limit for gateway service is 500
+[34m2025-09-19 10:29:45.777 UTC 003e INFO[0m [nodeCmd] [34;1mserve[0m -> Starting peer with TLS enabled
+[36m2025-09-19 10:29:45.805 UTC 003f DEBU[0m [transientstore] [36;1mnewStoreProvider[0m -> opening provider providerPath=/var/hyperledger/production/transientstore
+[36m2025-09-19 10:29:45.815 UTC 0040 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> Checking for db format at path [/var/hyperledger/production/transientstore]
+[36m2025-09-19 10:29:45.815 UTC 0041 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> format is latest, nothing to do
+[36m2025-09-19 10:29:45.816 UTC 0042 DEBU[0m [msp] [36;1mGetDefaultSigningIdentity[0m -> Obtaining default signing identity
+[36m2025-09-19 10:29:45.816 UTC 0043 DEBU[0m [msp.identity] [36;1mSign[0m -> Sign: plaintext: 00000000000000000000000000000000...00000000000000000000000000000000 
+[36m2025-09-19 10:29:45.816 UTC 0044 DEBU[0m [msp.identity] [36;1mSign[0m -> Sign: digest: 66687AADF862BD776C8FC18B8E9F8E20089714856EE233B3902A591D0D5F2925 
+[34m2025-09-19 10:29:45.816 UTC 0045 INFO[0m [certmonitor] [34;1mtrackCertExpiration[0m -> The enrollment certificate will expire on 2026-09-19 10:30:00 +0000 UTC
+[34m2025-09-19 10:29:45.816 UTC 0046 INFO[0m [certmonitor] [34;1mtrackCertExpiration[0m -> The server TLS certificate will expire on 2026-09-19 10:30:00 +0000 UTC
+[36m2025-09-19 10:29:45.817 UTC 0047 DEBU[0m [ccprovider] [36;1mListInstalledChaincodes[0m -> Returning []
+[34m2025-09-19 10:29:45.817 UTC 0048 INFO[0m [ledgermgmt] [34;1mNewLedgerMgr[0m -> Initializing LedgerMgr
+[34m2025-09-19 10:29:45.847 UTC 0049 INFO[0m [leveldbhelper] [34;1mopenDBAndCheckFormat[0m -> DB is empty Setting db format as 2.0
+[34m2025-09-19 10:29:45.848 UTC 004a INFO[0m [blkstorage] [34;1mNewProvider[0m -> Creating new file ledger directory at /var/hyperledger/production/ledgersData/chains/chains
+[34m2025-09-19 10:29:45.872 UTC 004b INFO[0m [leveldbhelper] [34;1mopenDBAndCheckFormat[0m -> DB is empty Setting db format as 2.5
+[36m2025-09-19 10:29:45.874 UTC 004c DEBU[0m [history] [36;1mNewDBProvider[0m -> constructing HistoryDBProvider dbPath=/var/hyperledger/production/ledgersData/historyLeveldb
+[34m2025-09-19 10:29:45.882 UTC 004d INFO[0m [leveldbhelper] [34;1mopenDBAndCheckFormat[0m -> DB is empty Setting db format as 2.0
+[36m2025-09-19 10:29:45.884 UTC 004e DEBU[0m [confighistory] [36;1mnewDBProvider[0m -> Opening db for config history: db path = /var/hyperledger/production/ledgersData/configHistory
+[36m2025-09-19 10:29:45.898 UTC 004f DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> Checking for db format at path [/var/hyperledger/production/ledgersData/configHistory]
+[36m2025-09-19 10:29:45.898 UTC 0050 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> format is latest, nothing to do
+[36m2025-09-19 10:29:45.907 UTC 0051 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> Checking for db format at path [/var/hyperledger/production/ledgersData/bookkeeper]
+[36m2025-09-19 10:29:45.907 UTC 0052 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> format is latest, nothing to do
+[36m2025-09-19 10:29:45.907 UTC 0053 DEBU[0m [statecouchdb] [36;1mNewVersionedDBProvider[0m -> constructing CouchDB VersionedDBProvider
+[36m2025-09-19 10:29:45.908 UTC 0054 DEBU[0m [couchdb] [36;1mverifyCouchConfig[0m -> Entering VerifyCouchConfig()
+[36m2025-09-19 10:29:45.908 UTC 0055 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=GET  url=http://couchdb.peer1-buyer1:5984/  dbName=
+[36m2025-09-19 10:29:45.909 UTC 0056 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/
+[33m2025-09-19 10:29:45.914 UTC 0057 WARN[0m [couchdb] [33;1mhandleRequest[0m -> Attempt 1 of 11 returned error: Get "http://couchdb.peer1-buyer1:5984/": dial tcp 172.26.0.2:5984: connect: connection refused. Retrying couchdb request in 125ms
+[33m2025-09-19 10:29:46.046 UTC 0058 WARN[0m [couchdb] [33;1mhandleRequest[0m -> Attempt 2 of 11 returned error: Get "http://couchdb.peer1-buyer1:5984/": dial tcp 172.26.0.2:5984: connect: connection refused. Retrying couchdb request in 250ms
+[33m2025-09-19 10:29:46.302 UTC 0059 WARN[0m [couchdb] [33;1mhandleRequest[0m -> Attempt 3 of 11 returned error: Get "http://couchdb.peer1-buyer1:5984/": dial tcp 172.26.0.2:5984: connect: connection refused. Retrying couchdb request in 500ms
+[33m2025-09-19 10:29:46.806 UTC 005a WARN[0m [couchdb] [33;1mhandleRequest[0m -> Attempt 4 of 11 returned error: Get "http://couchdb.peer1-buyer1:5984/": dial tcp 172.26.0.2:5984: connect: connection refused. Retrying couchdb request in 1s
+[36m2025-09-19 10:29:47.947 UTC 005b DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[36m2025-09-19 10:29:47.948 UTC 005c DEBU[0m [couchdb] [36;1mverifyCouchConfig[0m -> VerifyConnection() dbResponseJSON="{Welcome 3.2.3 {The Apache Software Foundation}}"
+[36m2025-09-19 10:29:47.948 UTC 005d DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [_users] Entering CreateDatabaseIfNotExist()
+[36m2025-09-19 10:29:47.948 UTC 005e DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=GET  url=http://couchdb.peer1-buyer1:5984  dbName=_users
+[36m2025-09-19 10:29:47.948 UTC 005f DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/_users
+[36m2025-09-19 10:29:47.964 UTC 0060 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Error handling CouchDB request. Error:not_found,  Status Code:404,  Reason:Database does not exist.
+[36m2025-09-19 10:29:47.964 UTC 0061 DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [_users] Database does not exist.
+[36m2025-09-19 10:29:47.964 UTC 0062 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=PUT  url=http://couchdb.peer1-buyer1:5984  dbName=_users
+[36m2025-09-19 10:29:47.964 UTC 0063 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/_users
+[36m2025-09-19 10:29:48.061 UTC 0064 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[34m2025-09-19 10:29:48.061 UTC 0065 INFO[0m [couchdb] [34;1mcreateDatabaseIfNotExist[0m -> Created state database _users
+[36m2025-09-19 10:29:48.061 UTC 0066 DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [_users] Exiting CreateDatabaseIfNotExist()
+[36m2025-09-19 10:29:48.061 UTC 0067 DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [_replicator] Entering CreateDatabaseIfNotExist()
+[36m2025-09-19 10:29:48.061 UTC 0068 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=GET  url=http://couchdb.peer1-buyer1:5984  dbName=_replicator
+[36m2025-09-19 10:29:48.061 UTC 0069 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/_replicator
+[36m2025-09-19 10:29:48.093 UTC 006a DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Error handling CouchDB request. Error:not_found,  Status Code:404,  Reason:Database does not exist.
+[36m2025-09-19 10:29:48.093 UTC 006b DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [_replicator] Database does not exist.
+[36m2025-09-19 10:29:48.094 UTC 006c DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=PUT  url=http://couchdb.peer1-buyer1:5984  dbName=_replicator
+[36m2025-09-19 10:29:48.094 UTC 006d DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/_replicator
+[36m2025-09-19 10:29:48.125 UTC 006e DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[34m2025-09-19 10:29:48.125 UTC 006f INFO[0m [couchdb] [34;1mcreateDatabaseIfNotExist[0m -> Created state database _replicator
+[36m2025-09-19 10:29:48.126 UTC 0070 DEBU[0m [couchdb] [36;1mapplyDatabaseSecurity[0m -> [_replicator] Entering ApplyDatabaseSecurity()
+[36m2025-09-19 10:29:48.126 UTC 0071 DEBU[0m [couchdb] [36;1mapplyDatabaseSecurity[0m -> [_replicator] Applying security to database: {"admins":{"names":["admin"],"roles":[]},"members":{"names":["admin"],"roles":[]}}
+[36m2025-09-19 10:29:48.126 UTC 0072 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=PUT  url=http://couchdb.peer1-buyer1:5984  dbName=_replicator
+[36m2025-09-19 10:29:48.126 UTC 0073 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/_replicator/_security
+[36m2025-09-19 10:29:48.158 UTC 0074 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[36m2025-09-19 10:29:48.158 UTC 0075 DEBU[0m [couchdb] [36;1mapplyDatabaseSecurity[0m -> [_replicator] Exiting ApplyDatabaseSecurity()
+[36m2025-09-19 10:29:48.158 UTC 0076 DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [_replicator] Exiting CreateDatabaseIfNotExist()
+[36m2025-09-19 10:29:48.159 UTC 0077 DEBU[0m [couchdb] [36;1mverifyCouchConfig[0m -> Exiting VerifyCouchConfig()
+[36m2025-09-19 10:29:48.159 UTC 0078 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=GET  url=http://couchdb.peer1-buyer1:5984/_all_dbs  dbName=
+[36m2025-09-19 10:29:48.159 UTC 0079 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/_all_dbs
+[36m2025-09-19 10:29:48.213 UTC 007a DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[36m2025-09-19 10:29:48.213 UTC 007b DEBU[0m [couchdb] [36;1mretrieveApplicationDBNames[0m -> dbNames = [_replicator _users]
+[36m2025-09-19 10:29:48.213 UTC 007c DEBU[0m [statecouchdb] [36;1mcheckExpectedDataformatVersion[0m -> couch instance is empty. Setting dataformat version to 2.0
+[36m2025-09-19 10:29:48.214 UTC 007d DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [fabric__internal] Entering CreateDatabaseIfNotExist()
+[36m2025-09-19 10:29:48.214 UTC 007e DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=GET  url=http://couchdb.peer1-buyer1:5984  dbName=fabric__internal
+[36m2025-09-19 10:29:48.214 UTC 007f DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/fabric__internal
+[36m2025-09-19 10:29:48.218 UTC 0080 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Error handling CouchDB request. Error:not_found,  Status Code:404,  Reason:Database does not exist.
+[36m2025-09-19 10:29:48.219 UTC 0081 DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [fabric__internal] Database does not exist.
+[36m2025-09-19 10:29:48.219 UTC 0082 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=PUT  url=http://couchdb.peer1-buyer1:5984  dbName=fabric__internal
+[36m2025-09-19 10:29:48.219 UTC 0083 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/fabric__internal
+[36m2025-09-19 10:29:48.250 UTC 0084 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[34m2025-09-19 10:29:48.250 UTC 0085 INFO[0m [couchdb] [34;1mcreateDatabaseIfNotExist[0m -> Created state database fabric__internal
+[36m2025-09-19 10:29:48.250 UTC 0086 DEBU[0m [couchdb] [36;1mapplyDatabaseSecurity[0m -> [fabric__internal] Entering ApplyDatabaseSecurity()
+[36m2025-09-19 10:29:48.250 UTC 0087 DEBU[0m [couchdb] [36;1mapplyDatabaseSecurity[0m -> [fabric__internal] Applying security to database: {"admins":{"names":["admin"],"roles":[]},"members":{"names":["admin"],"roles":[]}}
+[36m2025-09-19 10:29:48.250 UTC 0088 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=PUT  url=http://couchdb.peer1-buyer1:5984  dbName=fabric__internal
+[36m2025-09-19 10:29:48.250 UTC 0089 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/fabric__internal/_security
+[36m2025-09-19 10:29:48.266 UTC 008a DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[36m2025-09-19 10:29:48.266 UTC 008b DEBU[0m [couchdb] [36;1mapplyDatabaseSecurity[0m -> [fabric__internal] Exiting ApplyDatabaseSecurity()
+[36m2025-09-19 10:29:48.266 UTC 008c DEBU[0m [couchdb] [36;1mcreateDatabaseIfNotExist[0m -> [fabric__internal] Exiting CreateDatabaseIfNotExist()
+[36m2025-09-19 10:29:48.266 UTC 008d DEBU[0m [couchdb] [36;1msaveDoc[0m -> [fabric__internal] Entering SaveDoc() id=[dataformatVersion]
+[36m2025-09-19 10:29:48.266 UTC 008e DEBU[0m [couchdb] [36;1mreadDoc[0m -> [fabric__internal] Entering ReadDoc()  id=[dataformatVersion]
+[36m2025-09-19 10:29:48.266 UTC 008f DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=GET  url=http://couchdb.peer1-buyer1:5984  dbName=fabric__internal
+[36m2025-09-19 10:29:48.266 UTC 0090 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/fabric__internal/dataformatVersion?attachments=true
+[36m2025-09-19 10:29:48.268 UTC 0091 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Error handling CouchDB request. Error:not_found,  Status Code:404,  Reason:missing
+[36m2025-09-19 10:29:48.269 UTC 0092 DEBU[0m [couchdb] [36;1mreadDoc[0m -> [fabric__internal] Document not found (404), returning nil value instead of 404 error
+[36m2025-09-19 10:29:48.269 UTC 0093 DEBU[0m [couchdb] [36;1mreadDoc[0m -> [fabric__internal] Exiting ReadDoc()
+[36m2025-09-19 10:29:48.269 UTC 0094 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Entering handleRequest()  method=PUT  url=http://couchdb.peer1-buyer1:5984  dbName=fabric__internal
+[36m2025-09-19 10:29:48.269 UTC 0095 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Request URL: http://couchdb.peer1-buyer1:5984/fabric__internal/dataformatVersion
+[36m2025-09-19 10:29:48.321 UTC 0096 DEBU[0m [couchdb] [36;1mhandleRequest[0m -> Exiting handleRequest()
+[36m2025-09-19 10:29:48.321 UTC 0097 DEBU[0m [couchdb] [36;1msaveDoc[0m -> [fabric__internal] Exiting SaveDoc()
+[36m2025-09-19 10:29:48.334 UTC 0098 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> Checking for db format at path [/var/hyperledger/production/ledgersData/couchdbRedoLogs]
+[36m2025-09-19 10:29:48.334 UTC 0099 DEBU[0m [leveldbhelper] [36;1mopenDBAndCheckFormat[0m -> format is latest, nothing to do
+[36m2025-09-19 10:29:48.334 UTC 009a DEBU[0m [kvledger] [36;1mdeletePartialLedgers[0m -> Removing ledgers in state UNDER_CONSTRUCTION or UNDER_DELETION
+[34m2025-09-19 10:29:48.337 UTC 009b INFO[0m [ledgermgmt] [34;1mNewLedgerMgr[0m -> Initialized LedgerMgr
+[36m2025-09-19 10:29:48.338 UTC 009c DEBU[0m [grpc] [36;1mInfoDepth[0m -> [core] [Server #1]Server created
+[34m2025-09-19 10:29:48.339 UTC 009d INFO[0m [gossip.service] [34;1mNew[0m -> Initialize gossip with endpoint peer1-buyer1:7051
+[36m2025-09-19 10:29:48.339 UTC 009e DEBU[0m [msp] [36;1mDeserializeIdentity[0m -> Obtaining identity
+[36m2025-09-19 10:29:48.339 UTC 009f DEBU[0m [msp.identity] [36;1mnewIdentity[0m -> Creating identity instance for cert -----BEGIN CERTIFICATE-----
+MIICdjCCAh2gAwIBAgIUH3I8nlLrpgoiHBn1vJmI4+UgxsQwCgYIKoZIzj0EAwIw
+YjELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK
+EwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpyY2EtYnV5
+ZXIxMB4XDTI1MDkxOTEwMjQwMFoXDTI2MDkxOTEwMzAwMFowJjENMAsGA1UECxME
+cGVlcjEVMBMGA1UEAxMMcGVlcjEtYnV5ZXIxMFkwEwYHKoZIzj0CAQYIKoZIzj0D
+AQcDQgAERVWETcaf9dAvK6WF9dFzf7yDR3mUmk8IGV0F2CXG0N+6R8p0DIRMl2N4
+qSyjJpQJ8CuBIeEgg/OUxjSJFOGpa6OB7DCB6TAOBgNVHQ8BAf8EBAMCB4AwDAYD
+VR0TAQH/BAIwADAdBgNVHQ4EFgQUdR7FXrEtYtFfakG1o51OYk3Rds0wHwYDVR0j
+BBgwFoAUBzf0Gu3OqUojc/IHegQi+VGpQzIwKgYDVR0RBCMwIYIfcGVlcjEtYnV5
+ZXIxLmJ1eWVyMS5leGFtcGxlLmNvbTBdBggqAwQFBgcIAQRReyJhdHRycyI6eyJo
+Zi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6InBlZXIxLWJ1eWVy
+MSIsImhmLlR5cGUiOiJwZWVyIn19MAoGCCqGSM49BAMCA0cAMEQCIDyBkl7fxH1A
+1LsihOkJzsu/fYKLsCx0ddjkB0teaobZAiAuA7c/cFBJ6WS+pDd9F6v5FoaLFvUH
+pP/CDzr7lHw/Ew==
+-----END CERTIFICATE-----
+[36m2025-09-19 10:29:48.340 UTC 00a0 DEBU[0m [msp] [36;1mValidate[0m -> MSP Buyer1MSP validating identity
+[36m2025-09-19 10:29:48.340 UTC 00a1 DEBU[0m [msp] [36;1mgetCertificationChain[0m -> MSP Buyer1MSP getting certification chain
+[36m2025-09-19 10:29:48.342 UTC 00a2 DEBU[0m [gossip.discovery] [36;1mperiodicalReconnectToDead[0m -> Sleeping 25s
+[34m2025-09-19 10:29:48.342 UTC 00a3 INFO[0m [gossip.gossip] [34;1mNew[0m -> Creating gossip service with self membership of Endpoint: peer1-buyer1:7051, InternalEndpoint: peer1-buyer1:7051, PKI-ID: 7be9e424c2bc5ebed1dea3014c6a0c30826aff5ee031a5c05349863aba4393d2, Metadata: 
+[36m2025-09-19 10:29:48.342 UTC 00a4 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:29:48.342 UTC 00a5 DEBU[0m [msp.identity] [36;1mSign[0m -> Sign: plaintext: 1801AA01C7070A207BE9E424C2BC5EBE...455254494649434154452D2D2D2D2D0A 
+[36m2025-09-19 10:29:48.342 UTC 00a6 DEBU[0m [msp.identity] [36;1mSign[0m -> Sign: digest: E613FE288AB34CC644C758A59B94828D88B31272918B58A6466FDC9F97574276 
+[36m2025-09-19 10:29:48.342 UTC 00a7 DEBU[0m [gossip.pull] [36;1mAdd[0m -> Added {��$¼^��ޣLj0�j�^�1��SI�:�C��, total items: 1
+[34m2025-09-19 10:29:48.342 UTC 00a8 INFO[0m [lifecycle] [34;1mInitializeLocalChaincodes[0m -> Initialized lifecycle cache with 0 already installed chaincodes
+[34m2025-09-19 10:29:48.343 UTC 00a9 INFO[0m [gossip.gossip] [34;1mstart[0m -> Gossip instance peer1-buyer1:7051 started
+[36m2025-09-19 10:29:48.343 UTC 00aa DEBU[0m [gossip.gossip] [36;1msyncDiscovery[0m -> Entering discovery sync with interval 4s
+[36m2025-09-19 10:29:48.343 UTC 00ab DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[34m2025-09-19 10:29:48.343 UTC 00ac INFO[0m [nodeCmd] [34;1mcomputeChaincodeEndpoint[0m -> Entering computeChaincodeEndpoint with peerHostname: peer1-buyer1
+[34m2025-09-19 10:29:48.343 UTC 00ad INFO[0m [nodeCmd] [34;1mcomputeChaincodeEndpoint[0m -> Exit with ccEndpoint: peer1-buyer1:7052
+[33m2025-09-19 10:29:48.343 UTC 00ae WARN[0m [nodeCmd] [33;1mcreateChaincodeServer[0m -> peer.chaincodeListenAddress is not set, using peer1-buyer1:7052
+[36m2025-09-19 10:29:48.344 UTC 00af DEBU[0m [gossip.discovery] [36;1mConnect[0m -> Skipping connecting to myself
+[36m2025-09-19 10:29:48.346 UTC 00b0 DEBU[0m [grpc] [36;1mInfoDepth[0m -> [core] [Server #2]Server created
+[36m2025-09-19 10:29:48.347 UTC 00b1 DEBU[0m [nodeCmd] [36;1mserve[0m -> Running peer
+[34m2025-09-19 10:29:48.347 UTC 00b2 INFO[0m [sccapi] [34;1mDeploySysCC[0m -> deploying system chaincode 'lscc'
+[36m2025-09-19 10:29:48.347 UTC 00b3 DEBU[0m [sccapi] [36;1mfunc2[0m -> chaincode started for lscc.syscc
+[36m2025-09-19 10:29:48.348 UTC 00b4 DEBU[0m [sccapi] [36;1mfunc1[0m -> starting chaincode-support stream for  lscc.syscc
+[36m2025-09-19 10:29:48.348 UTC 00b5 DEBU[0m [chaincode] [36;1mhandleMessage[0m -> [] Fabric side handling ChaincodeMessage of type: REGISTER in state created
+[36m2025-09-19 10:29:48.348 UTC 00b6 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Received REGISTER in state created
+[36m2025-09-19 10:29:48.348 UTC 00b7 DEBU[0m [chaincode] [36;1mRegister[0m -> registered handler complete for chaincode lscc.syscc
+[36m2025-09-19 10:29:48.348 UTC 00b8 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Got REGISTER for chaincodeID = lscc.syscc, sending back REGISTERED
+[36m2025-09-19 10:29:48.349 UTC 00b9 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Changed state to established for lscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00ba DEBU[0m [chaincode] [36;1msendReady[0m -> sending READY for chaincode lscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00bb DEBU[0m [chaincode] [36;1msendReady[0m -> Changed to state ready for chaincode lscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00bc DEBU[0m [grpc] [36;1mInfoDepth[0m -> [core] [Server #2 ListenSocket #3]ListenSocket created
+[34m2025-09-19 10:29:48.349 UTC 00bd INFO[0m [sccapi] [34;1mDeploySysCC[0m -> deploying system chaincode 'cscc'
+[36m2025-09-19 10:29:48.349 UTC 00be DEBU[0m [sccapi] [36;1mfunc2[0m -> chaincode started for cscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00bf DEBU[0m [sccapi] [36;1mfunc1[0m -> starting chaincode-support stream for  cscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00c0 DEBU[0m [chaincode] [36;1mhandleMessage[0m -> [] Fabric side handling ChaincodeMessage of type: REGISTER in state created
+[36m2025-09-19 10:29:48.349 UTC 00c1 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Received REGISTER in state created
+[36m2025-09-19 10:29:48.349 UTC 00c2 DEBU[0m [chaincode] [36;1mRegister[0m -> registered handler complete for chaincode cscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00c3 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Got REGISTER for chaincodeID = cscc.syscc, sending back REGISTERED
+[36m2025-09-19 10:29:48.349 UTC 00c4 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Changed state to established for cscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00c5 DEBU[0m [chaincode] [36;1msendReady[0m -> sending READY for chaincode cscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00c6 DEBU[0m [chaincode] [36;1msendReady[0m -> Changed to state ready for chaincode cscc.syscc
+[34m2025-09-19 10:29:48.349 UTC 00c7 INFO[0m [sccapi] [34;1mDeploySysCC[0m -> deploying system chaincode 'qscc'
+[36m2025-09-19 10:29:48.349 UTC 00c8 DEBU[0m [sccapi] [36;1mfunc2[0m -> chaincode started for qscc.syscc
+[36m2025-09-19 10:29:48.349 UTC 00c9 DEBU[0m [sccapi] [36;1mfunc1[0m -> starting chaincode-support stream for  qscc.syscc
+[36m2025-09-19 10:29:48.350 UTC 00ca DEBU[0m [chaincode] [36;1mhandleMessage[0m -> [] Fabric side handling ChaincodeMessage of type: REGISTER in state created
+[36m2025-09-19 10:29:48.350 UTC 00cb DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Received REGISTER in state created
+[36m2025-09-19 10:29:48.350 UTC 00cc DEBU[0m [chaincode] [36;1mRegister[0m -> registered handler complete for chaincode qscc.syscc
+[36m2025-09-19 10:29:48.350 UTC 00cd DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Got REGISTER for chaincodeID = qscc.syscc, sending back REGISTERED
+[36m2025-09-19 10:29:48.350 UTC 00ce DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Changed state to established for qscc.syscc
+[36m2025-09-19 10:29:48.350 UTC 00cf DEBU[0m [chaincode] [36;1msendReady[0m -> sending READY for chaincode qscc.syscc
+[36m2025-09-19 10:29:48.350 UTC 00d0 DEBU[0m [chaincode] [36;1msendReady[0m -> Changed to state ready for chaincode qscc.syscc
+[34m2025-09-19 10:29:48.350 UTC 00d1 INFO[0m [sccapi] [34;1mDeploySysCC[0m -> deploying system chaincode '_lifecycle'
+[36m2025-09-19 10:29:48.350 UTC 00d2 DEBU[0m [sccapi] [36;1mfunc2[0m -> chaincode started for _lifecycle.syscc
+[36m2025-09-19 10:29:48.350 UTC 00d3 DEBU[0m [sccapi] [36;1mfunc1[0m -> starting chaincode-support stream for  _lifecycle.syscc
+[36m2025-09-19 10:29:48.350 UTC 00d4 DEBU[0m [chaincode] [36;1mhandleMessage[0m -> [] Fabric side handling ChaincodeMessage of type: REGISTER in state created
+[36m2025-09-19 10:29:48.350 UTC 00d5 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Received REGISTER in state created
+[36m2025-09-19 10:29:48.350 UTC 00d6 DEBU[0m [chaincode] [36;1mRegister[0m -> registered handler complete for chaincode _lifecycle.syscc
+[36m2025-09-19 10:29:48.350 UTC 00d7 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Got REGISTER for chaincodeID = _lifecycle.syscc, sending back REGISTERED
+[36m2025-09-19 10:29:48.350 UTC 00d8 DEBU[0m [chaincode] [36;1mHandleRegister[0m -> Changed state to established for _lifecycle.syscc
+[36m2025-09-19 10:29:48.350 UTC 00d9 DEBU[0m [chaincode] [36;1msendReady[0m -> sending READY for chaincode _lifecycle.syscc
+[36m2025-09-19 10:29:48.350 UTC 00da DEBU[0m [chaincode] [36;1msendReady[0m -> Changed to state ready for chaincode _lifecycle.syscc
+[34m2025-09-19 10:29:48.350 UTC 00db INFO[0m [nodeCmd] [34;1mserve[0m -> Deployed system chaincodes
+[34m2025-09-19 10:29:48.351 UTC 00dc INFO[0m [discovery] [34;1mNewService[0m -> Created with config TLS: true, authCacheMaxSize: 1000, authCachePurgeRatio: 0.750000
+[34m2025-09-19 10:29:48.351 UTC 00dd INFO[0m [nodeCmd] [34;1mserve[0m -> Discovery service activated
+[34m2025-09-19 10:29:48.351 UTC 00de INFO[0m [nodeCmd] [34;1mserve[0m -> Starting peer with Gateway enabled
+[34m2025-09-19 10:29:48.351 UTC 00df INFO[0m [nodeCmd] [34;1mserve[0m -> Starting peer with ID=[peer1-buyer1], network ID=[dev], address=[peer1-buyer1:7051]
+[34m2025-09-19 10:29:48.352 UTC 00e0 INFO[0m [nodeCmd] [34;1mserve[0m -> Started peer with ID=[peer1-buyer1], network ID=[dev], address=[peer1-buyer1:7051]
+[34m2025-09-19 10:29:48.352 UTC 00e1 INFO[0m [kvledger] [34;1mLoadPreResetHeight[0m -> Loading prereset height from path [/var/hyperledger/production/ledgersData/chains]
+[36m2025-09-19 10:29:48.352 UTC 00e2 DEBU[0m [blkstorage] [36;1mLoadPreResetHeight[0m -> Loading Pre-reset heights
+[34m2025-09-19 10:29:48.352 UTC 00e3 INFO[0m [blkstorage] [34;1mpreResetHtFiles[0m -> No active channels passed
+[36m2025-09-19 10:29:48.352 UTC 00e4 DEBU[0m [grpc] [36;1mInfoDepth[0m -> [core] [Server #1 ListenSocket #4]ListenSocket created
+[36m2025-09-19 10:29:52.344 UTC 00e5 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:29:53.342 UTC 00e6 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:29:53.342 UTC 00e7 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:29:56.345 UTC 00e8 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:29:58.343 UTC 00e9 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:29:58.343 UTC 00ea DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:00.347 UTC 00eb DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:03.345 UTC 00ec DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:03.345 UTC 00ed DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:04.347 UTC 00ee DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:08.346 UTC 00ef DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:08.346 UTC 00f0 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:08.348 UTC 00f1 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:12.349 UTC 00f2 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:13.343 UTC 00f3 DEBU[0m [gossip.discovery] [36;1mperiodicalReconnectToDead[0m -> Sleeping 25s
+[36m2025-09-19 10:30:13.347 UTC 00f4 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:13.347 UTC 00f5 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:16.350 UTC 00f6 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:18.348 UTC 00f7 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:18.348 UTC 00f8 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:20.351 UTC 00f9 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:23.348 UTC 00fa DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:23.348 UTC 00fb DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:24.352 UTC 00fc DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:28.349 UTC 00fd DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:28.349 UTC 00fe DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:28.353 UTC 00ff DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:32.355 UTC 0100 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:33.350 UTC 0101 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:33.350 UTC 0102 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:36.356 UTC 0103 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:38.345 UTC 0104 DEBU[0m [gossip.discovery] [36;1mperiodicalReconnectToDead[0m -> Sleeping 25s
+[36m2025-09-19 10:30:38.351 UTC 0105 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:38.351 UTC 0106 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:40.357 UTC 0107 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:43.351 UTC 0108 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:43.351 UTC 0109 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:44.357 UTC 010a DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:48.352 UTC 010b DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:48.352 UTC 010c DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:48.358 UTC 010d DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:52.358 UTC 010e DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:53.352 UTC 010f DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:53.352 UTC 0110 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:30:56.358 UTC 0111 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:30:58.353 UTC 0112 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:30:58.353 UTC 0113 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:00.358 UTC 0114 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:03.346 UTC 0115 DEBU[0m [gossip.discovery] [36;1mperiodicalReconnectToDead[0m -> Sleeping 25s
+[36m2025-09-19 10:31:03.354 UTC 0116 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:03.354 UTC 0117 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:04.359 UTC 0118 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:08.354 UTC 0119 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:08.354 UTC 011a DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:08.360 UTC 011b DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:12.362 UTC 011c DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:13.356 UTC 011d DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:13.356 UTC 011e DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:16.363 UTC 011f DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:18.357 UTC 0120 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:18.357 UTC 0121 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:20.364 UTC 0122 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:23.357 UTC 0123 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:23.357 UTC 0124 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:24.365 UTC 0125 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:28.347 UTC 0126 DEBU[0m [gossip.discovery] [36;1mperiodicalReconnectToDead[0m -> Sleeping 25s
+[36m2025-09-19 10:31:28.357 UTC 0127 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:28.357 UTC 0128 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:28.366 UTC 0129 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:32.367 UTC 012a DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:33.358 UTC 012b DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:33.358 UTC 012c DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:36.368 UTC 012d DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:38.359 UTC 012e DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:38.359 UTC 012f DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:40.369 UTC 0130 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:43.359 UTC 0131 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:43.359 UTC 0132 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:44.369 UTC 0133 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:48.361 UTC 0134 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:48.361 UTC 0135 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
+[36m2025-09-19 10:31:48.370 UTC 0136 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:52.372 UTC 0137 DEBU[0m [gossip.discovery] [36;1mInitiateSync[0m -> No peers to send to, aborting membership sync
+[36m2025-09-19 10:31:53.347 UTC 0138 DEBU[0m [gossip.discovery] [36;1mperiodicalReconnectToDead[0m -> Sleeping 25s
+[36m2025-09-19 10:31:53.362 UTC 0139 DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Empty membership, no one to send a heartbeat to
+[36m2025-09-19 10:31:53.362 UTC 013a DEBU[0m [gossip.discovery] [36;1mperiodicalSendAlive[0m -> Sleeping 5s
