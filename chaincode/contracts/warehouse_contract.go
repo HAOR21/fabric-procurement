@@ -19,8 +19,8 @@ func (s *WarehouseContract) ReceiveLogistics(
 	receiptID string,
 	logisticsID string,
 	qualityPassed bool,
-	actualTempMin *float64,
-	actualTempMax *float64,
+	actualTempMin float64,
+	actualTempMax float64,
 ) error {
 	if err := IsCallerFromOrgType(ctx, "Warehouse"); err != nil {
 		return err
@@ -52,8 +52,8 @@ func (s *WarehouseContract) ReceiveLogistics(
 	}
 
 	tempCompliance := true
-	if actualTempMin != nil && actualTempMax != nil {
-		if *actualTempMin < fruit.OptimalTempMin || *actualTempMax > fruit.OptimalTempMax {
+	if actualTempMin != 0.0 && actualTempMax != 0.0 {
+		if actualTempMin < fruit.OptimalTempMin || actualTempMax > fruit.OptimalTempMax {
 			tempCompliance = false
 		}
 	}

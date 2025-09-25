@@ -80,7 +80,7 @@ func (s *LogisticsContract) UpdateLogisticsStatus(
 	logisticsID string,
 	status string,
 	location string,
-	temperature *float64,
+	temperature float64,
 ) error {
 	if err := IsCallerFromOrgType(ctx, "Logistics"); err != nil {
 		return err
@@ -118,13 +118,13 @@ func (s *LogisticsContract) UpdateLogisticsStatus(
 
 	// 温度记录追加到私有集合：读取水果阈值并判定 IsAlert
 	// 获取商品以取得阈值
-	if temperature != nil {
+	if temperature != 0.0 {
 		// 通过物流单反查商品
 		fruitBytes, err := ctx.GetStub().GetState("FRUIT_" + logistics.ProductID)
 		if err == nil && fruitBytes != nil {
 			var fruit models.FruitProduct
 			if Deserialize(fruitBytes, &fruit) == nil {
-				isAlert := (*temperature < fruit.OptimalTempMin) || (*temperature > fruit.OptimalTempMax)
+				isAlert := (temperature < fruit.OptimalTempMin) || (temperature > fruit.OptimalTempMax)
 
 				// 读取现有私有数据
 				privBytes, _ := ctx.GetStub().GetPrivateData(config.CollectionBuyerWarehouseLogistics, "LOGISTICS_PRIVATE_"+logisticsID)
@@ -138,7 +138,7 @@ func (s *LogisticsContract) UpdateLogisticsStatus(
 				// 追加温度日志
 				priv.TemperatureLog = append(priv.TemperatureLog, models.TemperatureLog{
 					Timestamp:   NowUTC(),
-					Temperature: *temperature,
+					Temperature: temperature,
 					MinAllowed:  fruit.OptimalTempMin,
 					MaxAllowed:  fruit.OptimalTempMax,
 					IsAlert:     isAlert,

@@ -125,6 +125,12 @@ Application: &ApplicationDefaults
     Admins:
       Type: ImplicitMeta
       Rule: "MAJORITY Admins"
+    LifecycleEndorsement:  # 决定 哪些组织可以 approve 链码定义.下为默认值
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement: # 决定 链码交易需要哪些 Peer 背书（可通过 --signature-policy 覆盖）
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
   Capabilities:
     <<: *ApplicationCapabilities
 

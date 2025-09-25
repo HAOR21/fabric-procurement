@@ -25,6 +25,13 @@ services:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1-bank1:5984
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+      
+      - CORE_CHAINCODE_EXTERNALSERVICE=true #开启 链码即服务模式 
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s 
+      - CORE_CHAINCODE_EXTERNALBUILDERS=[] #禁用本地构建器（peer 不需要自己 build 代码） 
+      - CORE_CHAINCODE_LISTENADDRESS=0.0.0.0:7052 
+      - CORE_CHAINCODE_ADDRESS=0.0.0.0:7052 
+      - CORE_CHAINCODE_ADDRESSAUTODETECT=true #自动检测 peer 和链码进程之间的 反向通信地址
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/bank1/peer1
     volumes:
       - ../chaincodeRun:/host/var/run

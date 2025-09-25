@@ -1,39 +1,29 @@
 [
-  {
-    "name": "OrderCollection",
-    "policy": "OR('Buyer1MSP.member','Supplier1MSP.member')",
-    "requiredPeerCount": 1,
-    "maxPeerCount": 2,
-    "blockToLive": 0,
-    "memberOnlyRead": true,
-    "memberOnlyWrite": true
-  },
-  {
-    "name": "PaymentCollection",
-    "policy": "OR('Buyer1MSP.member','Bank1MSP.member')",
-    "requiredPeerCount": 1,
-    "maxPeerCount": 2,
-    "blockToLive": 0,
-    "memberOnlyRead": true,
-    "memberOnlyWrite": true
-  },
-  {
-    "name": "LogisticsCollection",
-    "policy": "OR('Logistics1MSP.member','Warehouse1MSP.member')",
-    "requiredPeerCount": 1,
-    "maxPeerCount": 2,
-    "blockToLive": 0,
-    "memberOnlyRead": true,
-    "memberOnlyWrite": true
-  },
-  {
-    "name": "WarehouseCollection",
-    "policy": "OR('Warehouse1MSP.member','Buyer1MSP.member','Logistics1MSP.member')",
-    "requiredPeerCount": 1,
-    "maxPeerCount": 3,
-    "blockToLive": 0,
-    "memberOnlyRead": true,
-    "memberOnlyWrite": true
-  }
+{
+"name": "collectionBuyerBankSupplier",
+"policy": "OR('Buyer1MSP.member', 'Bank1MSP.member', 'Supplier1MSP.member')",
+"requiredPeerCount": 1,
+"maxPeerCount": 3,
+"blockToLive": 1000000,
+"memberOnlyRead": true,
+"memberOnlyWrite": true
+},
+{
+"name": "collectionBuyerWarehouseLogistics",
+"policy": "OR('Buyer1MSP.member', 'Warehouse1MSP.member', 'Logistics1MSP.member')",
+"requiredPeerCount": 1,
+"maxPeerCount": 3,
+"blockToLive": 1000000,
+"memberOnlyRead": true,
+"memberOnlyWrite": true
+},
+{
+"name": "collectionBankOnly",
+"policy": "OR('Bank1MSP.member')",
+"requiredPeerCount": 1,
+"maxPeerCount": 1,
+"blockToLive": 1000000,
+"memberOnlyRead": true,
+"memberOnlyWrite": true
+}
 ]
-
