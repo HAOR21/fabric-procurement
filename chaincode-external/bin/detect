@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+METADIR=$2
+# Check if the "type" field is set to "external" in the metadata.json file
+if [ "$(jq -r .type "$METADIR/metadata.json")" == "external" ]; then
+    exit 0
+fi
+exit 1

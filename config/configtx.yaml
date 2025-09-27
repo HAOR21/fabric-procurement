@@ -128,9 +128,9 @@ Application: &ApplicationDefaults
     LifecycleEndorsement:  # 决定 哪些组织可以 approve 链码定义.下为默认值
       Type: ImplicitMeta
       Rule: "MAJORITY Endorsement"
-    Endorsement: # 决定 链码交易需要哪些 Peer 背书（可通过 --signature-policy 覆盖）
+    Endorsement: # 决定 链码交易需要哪些 Peer 背书（可以approve的被--signature-policy覆盖）
       Type: ImplicitMeta
-      Rule: "MAJORITY Endorsement"
+      Rule: "MAJORITY Endorsement"  
   Capabilities:
     <<: *ApplicationCapabilities
 
@@ -172,6 +172,9 @@ Channel: &ChannelDefaults
     Admins:
       Type: ImplicitMeta
       Rule: "MAJORITY Admins"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "ANY Endorsement" #TODO 仅方便测试环境，生产环境需要MAJORITY
   Capabilities:
     <<: *ChannelCapabilities
 

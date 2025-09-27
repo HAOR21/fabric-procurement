@@ -35,14 +35,12 @@ services:
 
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/buyer1/peer1  # 容器工作目录
     volumes:
-      - ../chaincodeRun:/host/var/run   # Docker socket 映射，用于 chaincode 容器
+      - /var/run/docker.sock:/host/var/run/docker.sock   # Docker socket 映射，用于 chaincode 容器
+      - ../../chaincode-external/bin:/opt/hyperledger/external-builder/bin   #外部链码构建器
       - ../../data/buyer1/peer1:/var/hyperledger/production  # Peer 数据挂载卷
-  # 1. Peer MSP
-      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/msp:/etc/hyperledger/msp
-  # 2. Peer TLS 证书和私钥
-      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls:/etc/hyperledger/tls
-  # 3. TLS-CA 根证书路径
-      - ../../organizations/fabric-ca/tls-ca/crypto:/etc/hyperledger/tlsca
+      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/msp:/etc/hyperledger/msp   # 1. Peer MSP
+      - ../../organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls:/etc/hyperledger/tls   # 2. Peer TLS 证书和私钥
+      - ../../organizations/fabric-ca/tls-ca/crypto:/etc/hyperledger/tlsca  # 3. TLS-CA 根证书路径
       - ../../config/channel-artifacts:/etc/hyperledger/channel-artifacts
       - ../../organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls:/etc/hyperledger/ordererOrg0/tls #挂载排序节点的TLS证书，Peer 需要验证 Orderer的身份
 #      - ../../config/core/buyer1/peer1-buyer1:/etc/hyperledger/fabric/config/core/buyer1/peer1-buyer1

@@ -550,6 +550,18 @@ runTest() {
 
   echo "====8️⃣ Approving chaincode definition for all organizations ===="
 
+  # 1️⃣ 打包 code/ -> code.tar.gz
+  tar -C ./chaincode-external/code -czf ./chaincode-external/code.tar.gz .
+
+  # 2️⃣ 打包 metadata.json + connection.json + code.tar.gz -> basic_1.0.tar.gz
+  tar -czf ./chaincode-external/basic_1.0.tar.gz -C ./chaincode-external metadata.json connection.json code.tar.gz
+  echo ">>>>>>>>>>>>>>>>>>>>>>>Installing chaincode on buyer1"
+  source ./config/changePeer/peer1-buyer1-setEnv.sh
+  peer lifecycle chaincode install ./chaincode-external/basic_1.0.tar.gz
+
+  echo ">>>>>>>>>>>>>>>>>>>>>>> Query package ID from buyer1 "
+  PACKAGE_ID=$(peer lifecycle chaincode queryinstalled | grep "basic_1.0" | awk -F "[ ,]+" '{print $3}')
+
   ORGANIZATIONS=("buyer1" "logistics1" "supplier1" "warehouse1" "bank1")
 
   for org in "${ORGANIZATIONS[@]}"; do
@@ -569,6 +581,7 @@ runTest() {
       --channelID mychannel \
       --name basic \
       --version 1.0 \
+      --package-id $PACKAGE_ID \
       --sequence 1 \
       --collections-config $PROJECT_ROOT/config/collections_config.json \
       --signature-policy "OR('Buyer1MSP.member','Supplier1MSP.member','Warehouse1MSP.member','Bank1MSP.member','Logistics1MSP.member')" \
@@ -583,11 +596,11 @@ runTest() {
     fi
   done
 
+
   echo "====9️⃣ Committing chaincode definition ===="
 
   # 任选一个组织来执行 commit
   source ./config/changePeer/peer1-logistics1-setEnv.sh
-  env
   peer lifecycle chaincode commit \
     -o orderer1-org0:7050 \
     --ordererTLSHostnameOverride orderer1-org0 \
@@ -596,19 +609,13 @@ runTest() {
     --channelID mychannel \
     --name basic \
     --version 1.0 \
+    --package-id $PACKAGE_ID \
     --sequence 1 \
     --collections-config $PROJECT_ROOT/config/collections_config.json \
-    --signature-policy "OR('Buyer1MSP.member','Logistics1MSP.member','Supplier1MSP.member','Warehouse1MSP.member','Bank1MSP.member')" \
-    --peerAddresses peer1-buyer1:7051 \
-    --peerAddresses peer1-logistics1:7051 \
-    --peerAddresses peer1-supplier1:7051 \
-    --peerAddresses peer1-warehouse1:7051 \
-    --peerAddresses peer1-bank1:7051 \
-    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls/ca.crt" \
+    --signature-policy "OR('Buyer1MSP.member','Supplier1MSP.member','Warehouse1MSP.member','Bank1MSP.member','Logistics1MSP.member')" \
+    --peerAddresses peer1-logistics1:9051 \
     --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/logistics1.example.com/peers/peer1-logistics1.logistics1.example.com/tls/ca.crt" \
-    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/supplier1.example.com/peers/peer1-supplier1.supplier1.example.com/tls/ca.crt" \
-    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/tls/ca.crt" \
-    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/bank1.example.com/peers/peer1-bank1.bank1.example.com/tls/ca.crt"
+
 
   echo "==== 全流程 runTest 完成 ===="
 }
@@ -639,6 +646,9 @@ down() {
   rm -rf ./config/channel-artifacts/* || true
   sudo rm -rf ./organizations || true
   sudo rm -rf ./data || true
+
+  echo "./chaincode-external 下所有外部链码包配置 文件"
+  rm -f ./chaincode-external/*.tar.gz
 
   # 4) 取消设置脚本内导出的环境变量，恢复到初始环境
   echo "- 清理环境变量"

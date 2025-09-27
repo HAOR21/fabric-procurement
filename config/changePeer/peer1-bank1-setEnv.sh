@@ -15,6 +15,10 @@ export CORE_PEER_LOCALMSPID=Bank1MSP
 export CORE_PEER_TLS_ROOTCERT_FILE=$PROJECT_ROOT/organizations/peerOrganizations/bank1.example.com/peers/peer1-bank1.bank1.example.com/tls/ca.crt
 export CORE_PEER_ADDRESS=peer1-bank1:8051
 export CORE_PEER_MSPCONFIGPATH=$PROJECT_ROOT/organizations/peerOrganizations/bank1.example.com/users/Admin-bank1@bank1.example.com/msp #这里需要指向具体身份的MSp文件来表明客户端的身份
+export CORE_CHAINCODE_EXTERNALSERVICE=true #开启 链码即服务模式 
+export CORE_CHAINCODE_EXECUTETIMEOUT=300s
+export CORE_CHAINCODE_EXTERNALBUILDERS=[] #禁用本地构建器（peer 不需要自己 build 代码） 
+export CORE_CHAINCODE_ADDRESSAUTODETECT=true #自动检测 peer 和链码进程之间的 反向通信地址
 
 popd > /dev/null
 
