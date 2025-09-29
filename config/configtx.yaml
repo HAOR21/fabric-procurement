@@ -29,6 +29,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('Buyer1MSP.admin')"
+      Endorsement:  
+        Type: Signature
+        Rule: "OR('Buyer1MSP.admin', 'Buyer1MSP.peer')"
     AnchorPeers:
       - Host: peer1-buyer1
         Port: 7051
@@ -47,6 +50,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('Supplier1MSP.admin')"
+      Endorsement:  
+        Type: Signature
+        Rule: "OR('Supplier1MSP.admin', 'Supplier1MSP.peer')"
     AnchorPeers:
       - Host: peer1-supplier1
         Port: 7051
@@ -65,6 +71,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('Logistics1MSP.admin')"
+      Endorsement:  
+        Type: Signature
+        Rule: "OR('Logistics1MSP.admin', 'Logistics1MSP.peer')"
     AnchorPeers:
       - Host: peer1-logistics1
         Port: 7051
@@ -83,6 +92,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('Warehouse1MSP.admin')"
+      Endorsement:  
+        Type: Signature
+        Rule: "OR('Warehouse1MSP.admin', 'Warehouse1MSP.peer')"
     AnchorPeers:
       - Host: peer1-warehouse1
         Port: 7051
@@ -101,6 +113,9 @@ Organizations:
       Admins:
         Type: Signature
         Rule: "OR('Bank1MSP.admin')"
+      Endorsement:  
+        Type: Signature
+        Rule: "OR('Bank1MSP.admin', 'Bank1MSP.peer')"
     AnchorPeers:
       - Host: peer1-bank1
         Port: 7051
@@ -125,12 +140,12 @@ Application: &ApplicationDefaults
     Admins:
       Type: ImplicitMeta
       Rule: "MAJORITY Admins"
-    LifecycleEndorsement:  # 决定 哪些组织可以 approve 链码定义.下为默认值
+    LifecycleEndorsement:  # 决定哪些组织可以 approve 和 commit 链码定义
       Type: ImplicitMeta
-      Rule: "MAJORITY Endorsement"
+      Rule: "ANY Endorsement"
     Endorsement: # 决定 链码交易需要哪些 Peer 背书（可以approve的被--signature-policy覆盖）
       Type: ImplicitMeta
-      Rule: "MAJORITY Endorsement"  
+      Rule: "ANY Endorsement"  
   Capabilities:
     <<: *ApplicationCapabilities
 
@@ -174,7 +189,7 @@ Channel: &ChannelDefaults
       Rule: "MAJORITY Admins"
     Endorsement:
       Type: ImplicitMeta
-      Rule: "ANY Endorsement" #TODO 仅方便测试环境，生产环境需要MAJORITY
+      Rule: "MAJORITY Endorsement" 
   Capabilities:
     <<: *ChannelCapabilities
 

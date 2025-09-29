@@ -1,7 +1,7 @@
 services:
   orderer1-org0:
     container_name: orderer1-org0
-    image: hyperledger/fabric-orderer
+    image: hyperledger/fabric-orderer:latest 
 #    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug

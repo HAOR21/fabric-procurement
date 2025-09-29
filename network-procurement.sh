@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export FABRIC_LOGGING_SPEC=DEBUG
+export FABRIC_LOGGING_SPEC=peer.lscc=debug:debug
 # -------------------------------
 # 工具函数
 # -------------------------------
@@ -364,7 +364,6 @@ runTest() {
   export FABRIC_TLS_ORG0=./organizations/ordererOrganizations/org0.example.com/orderers/orderer1-org0.org0.example.com/tls/ca.crt
   echo "====1️⃣ Run CA server ===="
   runCAServer
-
   echo "==== 2️⃣  TLS-CA enroll ===="
 
 
@@ -550,14 +549,28 @@ runTest() {
 
   echo "====8️⃣ Approving chaincode definition for all organizations ===="
 
-  # 1️⃣ 打包 code/ -> code.tar.gz
-  tar -C ./chaincode-external/code -czf ./chaincode-external/code.tar.gz .
 
-  # 2️⃣ 打包 metadata.json + connection.json + code.tar.gz -> basic_1.0.tar.gz
-  tar -czf ./chaincode-external/basic_1.0.tar.gz -C ./chaincode-external metadata.json connection.json code.tar.gz
   echo ">>>>>>>>>>>>>>>>>>>>>>>Installing chaincode on buyer1"
-  source ./config/changePeer/peer1-buyer1-setEnv.sh
-  peer lifecycle chaincode install ./chaincode-external/basic_1.0.tar.gz
+
+  # 循环所有组织，在各自的 peer1 上安装链码
+  for peers in "${PEERS[@]}"; do
+    echo ">>>>>>>>>>>>>>>>>>>>>>> Installing chaincode on $peers"
+    # 切换到对应 peer 的环境变量
+    source ./config/changePeer/${peers}-setEnv.sh
+  
+    # 安装链码
+    peer lifecycle chaincode install ./chaincode-external/basic_1.0.tgz
+
+    if [ $? -eq 0 ]; then
+      echo "✅ Chaincode installed on $peers"
+    else
+      echo "❌ Failed to install chaincode on $peers"
+      exit 1
+    fi
+  done
+
+
+
 
   echo ">>>>>>>>>>>>>>>>>>>>>>> Query package ID from buyer1 "
   PACKAGE_ID=$(peer lifecycle chaincode queryinstalled | grep "basic_1.0" | awk -F "[ ,]+" '{print $3}')
@@ -596,6 +609,16 @@ runTest() {
     fi
   done
 
+  peer lifecycle chaincode checkcommitreadiness \
+    --channelID mychannel \
+    --name basic \
+    --version 1.0 \
+    --sequence 1 \
+    --collections-config $PROJECT_ROOT/config/collections_config.json \
+    --signature-policy "OR('Buyer1MSP.member','Supplier1MSP.member','Warehouse1MSP.member','Bank1MSP.member','Logistics1MSP.member')" \
+    --output json
+
+
 
   echo "====9️⃣ Committing chaincode definition ===="
 
@@ -609,12 +632,19 @@ runTest() {
     --channelID mychannel \
     --name basic \
     --version 1.0 \
-    --package-id $PACKAGE_ID \
     --sequence 1 \
     --collections-config $PROJECT_ROOT/config/collections_config.json \
     --signature-policy "OR('Buyer1MSP.member','Supplier1MSP.member','Warehouse1MSP.member','Bank1MSP.member','Logistics1MSP.member')" \
+    --peerAddresses peer1-buyer1:7051 \
+    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/buyer1.example.com/peers/peer1-buyer1.buyer1.example.com/tls/ca.crt" \
+    --peerAddresses peer1-bank1:8051 \
+    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/bank1.example.com/peers/peer1-bank1.bank1.example.com/tls/ca.crt" \
     --peerAddresses peer1-logistics1:9051 \
     --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/logistics1.example.com/peers/peer1-logistics1.logistics1.example.com/tls/ca.crt" \
+    --peerAddresses peer1-supplier1:10051 \
+    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/supplier1.example.com/peers/peer1-supplier1.supplier1.example.com/tls/ca.crt" \
+    --peerAddresses peer1-warehouse1:11051 \
+    --tlsRootCertFiles "$PROJECT_ROOT/organizations/peerOrganizations/warehouse1.example.com/peers/peer1-warehouse1.warehouse1.example.com/tls/ca.crt" 
 
 
   echo "==== 全流程 runTest 完成 ===="

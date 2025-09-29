@@ -1,15 +1,19 @@
 #!/bin/bash
 set -euo pipefail
-BLD="$1"
-RELEASE="$2"
+
+BLD="$1"     # build output dir
+RELEASE="$2" # release dir
+
 if [ -d "$BLD/metadata" ]; then
-   cp -a "$BLD/metadata/"* "$RELEASE/"
+   cp -a "$BLD/metadata/"* "$RELEASE"/
 fi
+
 # External chaincodes expect artifacts to be placed under "$RELEASE"/chaincode/server
-if [ -f $BLD/connection.json ]; then
-   mkdir -p "$RELEASE"/chaincode/server
-   cp $BLD/connection.json "$RELEASE"/chaincode/server
-   # If tls_required is true, copy TLS files (using above example, the fully qualified path for these fils would be "$RELEASE"/chaincode/server/tls)
+if [ -f "$BLD/connection.json" ]; then
+   mkdir -p "$RELEASE/chaincode/server"
+   cp "$BLD/connection.json" "$RELEASE/chaincode/server"
    exit 0
 fi
+
 exit 1
+

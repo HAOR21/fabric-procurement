@@ -3,10 +3,6 @@ peer:
   networkId: dev
   address: 0.0.0.0:7051
   localMspId: Bank1MSP
-  chaincode:
-    externalBuilders:
-      - name: myexternal
-        path: /opt/hyperledger/external-builder # 这是 *容器内部* 的路径，在 docker-compose 中挂载脚本到此路径
   BCCSP:
     Default: SW
     SW:
@@ -14,5 +10,9 @@ peer:
       Security: 256
       FileKeyStore:
         KeyStore: /etc/hyperledger/msp/keystore
+chaincode:
+  externalBuilders:
+    - name: myexternal
+      path: /opt/hyperledger/external-builder # 这是 *容器内部* 的路径，在 docker-compose 中挂载脚本到此路径
 
 
